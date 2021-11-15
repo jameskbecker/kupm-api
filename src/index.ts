@@ -10,7 +10,7 @@ app.get('/projects', (req, res) => {
 
 app.get('/projects/:id', (req, res) => {
   const id = req.params.id;
-  const [project] = projectData.filter((p) => p.id === id);
+  const project = projectData.find((p) => p.id === id);
 
   if (!project) {
     res.json({
