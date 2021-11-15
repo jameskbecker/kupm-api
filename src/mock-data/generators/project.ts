@@ -8,6 +8,7 @@ for (let i = 0; i < 7; i++) {
   x.push({
     id: uuid(),
     name: 'Project ' + (i + 1),
+    description: 'A cool project',
     isComplete: false,
     priority: -1,
     timeCreated: Date.now(),

@@ -1,6 +1,7 @@
 export type Project = {
   id: string;
   name: string;
+  description: string;
   isComplete: boolean;
   priority: number;
   timeCreated: number;
@@ -12,6 +13,7 @@ const data: Project[] = [
   {
     id: '0fa9033b-bd61-48b9-840b-08d566acaac2',
     name: 'Project 1',
+    description: 'A cool project',
     isComplete: false,
     priority: -1,
     timeCreated: 1635952849473,
@@ -21,6 +23,7 @@ const data: Project[] = [
   {
     id: '96de34f8-c30e-43b2-b4e9-a39014cea80e',
     name: 'Project 2',
+    description: 'A cool project',
     isComplete: false,
     priority: -1,
     timeCreated: 1635952849473,
@@ -30,6 +33,7 @@ const data: Project[] = [
   {
     id: '94dea4ee-facb-4859-bca3-404aa06897a1',
     name: 'Project 3',
+    description: 'A cool project',
     isComplete: false,
     priority: -1,
     timeCreated: 1635952849473,
@@ -39,6 +43,7 @@ const data: Project[] = [
   {
     id: '4c7ea833-91ca-4ce8-b248-b39f566f40bd',
     name: 'Project 4',
+    description: 'A cool project',
     isComplete: false,
     priority: -1,
     timeCreated: 1635952849473,
@@ -48,6 +53,7 @@ const data: Project[] = [
   {
     id: 'd124e60d-7f6a-4f7f-a781-f641b4be6c30',
     name: 'Project 5',
+    description: 'A cool project',
     isComplete: false,
     priority: -1,
     timeCreated: 1635952849473,
@@ -57,6 +63,7 @@ const data: Project[] = [
   {
     id: 'e0cbcf2b-1f50-42a9-b5a3-fdb4c79a2d24',
     name: 'Project 6',
+    description: 'A cool project',
     isComplete: false,
     priority: -1,
     timeCreated: 1635952849473,
@@ -66,6 +73,7 @@ const data: Project[] = [
   {
     id: '143bfff6-7569-433b-8e5f-f44eee92bc69',
     name: 'Project 7',
+    description: 'A cool project',
     isComplete: false,
     priority: -1,
     timeCreated: 1635952849473,

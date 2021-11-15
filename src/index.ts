@@ -1,10 +1,23 @@
 import express from 'express';
-import project from './mock-data/project';
+import projectData from './mock-data/project';
 
 const app = express();
 const port = 8080;
 
-app.get('/project', (req, res) => {
+app.get('/projects', (req, res) => {
+  res.json(projectData);
+});
+
+app.get('/projects/:id', (req, res) => {
+  const id = req.params.id;
+  const [project] = projectData.filter((p) => p.id === id);
+
+  if (!project) {
+    res.json({
+      error: 'Project not Found.',
+    });
+  }
+
   res.json(project);
 });
 
