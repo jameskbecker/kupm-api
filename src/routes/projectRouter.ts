@@ -27,6 +27,7 @@ projectRouter.get('/:id', async (req, res) => {
     }
     res.status(200);
     res.header('content-type', 'application/json');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.json(project);
   } catch (e: any) {
     res.status(503);
