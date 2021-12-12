@@ -1,4 +1,3 @@
-import { Project } from '../mock-data/project';
 import connection from './connection';
 
 export const selectAllProjects = async () => {
