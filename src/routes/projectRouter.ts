@@ -6,9 +6,11 @@ const projectRouter = Router();
 projectRouter.get('/', async (req, res) => {
   try {
     const projects = await selectAllProjects();
-    res.status(200);
-    res.header('content-type', 'application/json');
-    res.json(projects);
+    res.set({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+    });
+    res.status(200).json(projects);
   } catch (e: any) {
     console.log(e);
     res.status(503);
@@ -26,8 +28,10 @@ projectRouter.get('/:id', async (req, res) => {
       });
     }
 
-    res.set('Content-Type', 'application/json');
-    res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.set({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+    });
     res.status(200).json(project);
   } catch (e: any) {
     res.status(503);
