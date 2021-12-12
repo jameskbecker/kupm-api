@@ -25,10 +25,10 @@ projectRouter.get('/:id', async (req, res) => {
         error: 'Project not Found.',
       });
     }
-    res.status(200);
-    res.header('content-type', 'application/json');
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.json(project);
+
+    res.set('Content-Type', 'application/json');
+    res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.status(200).json(project);
   } catch (e: any) {
     res.status(503);
     res.json({ error: e.message() });
