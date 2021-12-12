@@ -7,6 +7,7 @@ projectRouter.get('/', async (req, res) => {
   try {
     const projects = await selectAllProjects();
     res.status(200);
+    res.header('content-type', 'application/json');
     res.json(projects);
   } catch (e: any) {
     console.log(e);
@@ -25,6 +26,7 @@ projectRouter.get('/:id', async (req, res) => {
       });
     }
     res.status(200);
+    res.header('content-type', 'application/json');
     res.json(project);
   } catch (e: any) {
     res.status(503);
