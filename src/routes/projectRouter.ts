@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   deleteProjectById,
+  editProjectById,
   insertProject,
   selectAllProjects,
   selectProjectById,
@@ -45,8 +46,6 @@ projectRouter.get('/:id', async (req, res) => {
 });
 
 projectRouter.post('/', async (req, res) => {
-  console.log(req);
-  //add validation
   const projects = await insertProject(req.body);
   try {
     res.set({
@@ -63,7 +62,7 @@ projectRouter.post('/', async (req, res) => {
 
 projectRouter.delete('/:id', async (req, res) => {
   const id = req.params.id;
-  console.log(id);
+
   try {
     const project = await deleteProjectById(id);
     if (!project) {
@@ -80,6 +79,29 @@ projectRouter.delete('/:id', async (req, res) => {
   } catch (e: any) {
     res.status(503);
     res.json({ error: e.message() });
+  }
+});
+
+projectRouter.put('/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const project = await editProjectById(id, req.body);
+    if (!project) {
+      res.json({
+        error: 'Project not Found.',
+      });
+      return;
+    }
+
+    res.set({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+    });
+    res.status(200).json(project);
+  } catch (e: any) {
+    res.status(503);
+    res.json({ error: e.message });
   }
 });
 
