@@ -2,7 +2,8 @@ import connection from './connection';
 
 export const selectAllProjects = async () => {
   try {
-    const [rows] = await connection.promise().query('SELECT * FROM Project');
+    const statement = 'SELECT * FROM Project';
+    const [rows] = await connection.promise().query(statement);
     return rows;
   } catch (e) {
     console.error('selectAllProjects', e);
@@ -11,9 +12,8 @@ export const selectAllProjects = async () => {
 
 export const selectProjectById = async (id: string) => {
   try {
-    const [[project]]: any = await connection
-      .promise()
-      .query(`SELECT * FROM Project WHERE id = "${id}"`);
+    const statement = `SELECT * FROM Project WHERE id = "${id}"`;
+    const [[project]]: any = await connection.promise().query(statement);
 
     return project;
   } catch (e) {
@@ -23,9 +23,8 @@ export const selectProjectById = async (id: string) => {
 
 export const deleteProjectById = async (id: string) => {
   try {
-    const [[project]]: any = await connection
-      .promise()
-      .query(`DELETE FROM Project WHERE id = "${id}"`);
+    const statement = `DELETE FROM Project WHERE id = "${id}"`;
+    const [[project]]: any = await connection.promise().query(statement);
 
     return project;
   } catch (e) {
@@ -35,16 +34,17 @@ export const deleteProjectById = async (id: string) => {
 
 export const editProjectById = async (id: string, payload: any) => {
   const values: string[] = [];
-  const editableKeys = ['name', 'description', 'isComplete', 'priority'];
+  const editableColumns = ['name', 'description', 'isComplete', 'priority'];
 
-  editableKeys.forEach(
+  editableColumns.forEach(
     (k) => payload[k] && values.push(`${k} = "${payload[k]}"`)
   );
 
   try {
-    const [[project]]: any = await connection.promise().query(`
-      UPDATE Project SET ${values.join(',')} WHERE id = "${id}"
-    `);
+    const statement = `UPDATE Project SET ${values.join(
+      ','
+    )} WHERE id = "${id}"`;
+    const [[project]]: any = await connection.promise().query(statement);
 
     return project;
   } catch (e) {
@@ -52,26 +52,22 @@ export const editProjectById = async (id: string, payload: any) => {
   }
 };
 
-export const insertProject = async (data: any) => {
-  const { name, description, priority } = data;
-  console.log(data);
+export const insertProject = async (payload: any) => {
+  const { name, description, priority } = payload;
+  const data = {
+    id: 'uuid()',
+    name: `"${name}"`,
+    description: `"${description}"`,
+    isComplete: 'false',
+    priority: `"${priority}"`,
+    timeCreated: 'unix_timestamp()',
+  };
+  const columns = Object.keys(data).join(',');
+  const values = Object.keys(data).join(',');
+
   try {
-    const [rows] = await connection.promise().query(`INSERT INTO Project (
-      id,
-      name,
-      description,
-      isComplete,
-      priority,
-      timeCreated
-    )
-    VALUES (
-      uuid(),
-        "${name}",
-        "${description}",
-        false,
-        "${priority}",
-        unix_timestamp()
-    )`);
+    const statement = `INSERT INTO Project (${columns}) VALUES (${values})`;
+    const [rows] = await connection.promise().query(statement);
     return rows;
   } catch (e) {
     throw e;
