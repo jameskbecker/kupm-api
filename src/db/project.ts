@@ -1,10 +1,12 @@
+import { ResultSetHeader } from 'mysql2';
 import connection from './connection';
+import { ProjectTable } from './types';
 
 export const selectAllProjects = async () => {
   try {
     const statement = 'SELECT * FROM Project';
-    const [rows] = await connection.promise().query(statement);
-    return rows;
+    const [rows]: unknown[] = await connection.promise().query(statement);
+    return <ProjectTable>rows;
   } catch (e) {
     console.error('selectAllProjects', e);
   }
@@ -12,7 +14,9 @@ export const selectAllProjects = async () => {
 
 export const selectProjectById = async (id: string) => {
   try {
-    const statement = `SELECT * FROM Project WHERE id = "${id}"`;
+    const idValue = id === 'last' ? 'LAST_INSERT_ID()' : `"${id}"`;
+    console.log(idValue);
+    const statement = `SELECT * FROM Project WHERE id = ${idValue}`;
     const [[project]]: any = await connection.promise().query(statement);
 
     return project;
@@ -34,16 +38,15 @@ export const deleteProjectById = async (id: string) => {
 
 export const editProjectById = async (id: string, payload: any) => {
   const values: string[] = [];
-  const editableColumns = ['name', 'description', 'isComplete', 'priority'];
+  const editableColumns = ['name', 'description', 'is_complete', 'priority'];
 
   editableColumns.forEach(
     (k) => payload[k] && values.push(`${k} = "${payload[k]}"`)
   );
 
   try {
-    const statement = `UPDATE Project SET ${values.join(
-      ','
-    )} WHERE id = "${id}"`;
+    const data = values.join(',');
+    const statement = `UPDATE Project SET ${data} WHERE id = "${id}"`;
     const [[project]]: any = await connection.promise().query(statement);
 
     return project;
@@ -58,17 +61,19 @@ export const insertProject = async (payload: any) => {
     id: 'uuid()',
     name: `"${name}"`,
     description: `"${description}"`,
-    isComplete: 'false',
+    is_complete: 'false',
     priority: `"${priority}"`,
-    timeCreated: 'unix_timestamp()',
+    created_at: 'unix_timestamp()',
   };
+
   const columns = Object.keys(data).join(',');
-  const values = Object.keys(data).join(',');
+  const values = Object.values(data).join(',');
 
   try {
     const statement = `INSERT INTO Project (${columns}) VALUES (${values})`;
-    const [rows] = await connection.promise().query(statement);
-    return rows;
+    const results = await connection.promise().query(statement);
+
+    return results[0];
   } catch (e) {
     throw e;
   }
