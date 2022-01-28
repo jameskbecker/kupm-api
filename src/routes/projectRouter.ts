@@ -1,4 +1,3 @@
-import { ProjectTable } from 'db/types';
 import { Router } from 'express';
 import {
   deleteProjectById,
@@ -7,7 +6,7 @@ import {
   selectAllProjects,
   selectProjectById,
 } from '../db/project';
-import { ProjectResponse } from './types';
+import { selectTasksByProjectId } from '../db/task';
 
 const projectRouter = Router();
 const defaultBody = { success: false };
@@ -48,6 +47,7 @@ projectRouter.get('/', async (req, res) => {
 projectRouter.get('/:id', async (req, res) => {
   const id = req.params.id;
   let body: any = defaultBody;
+
   res.set(defaultHeaders);
   try {
     const project = await selectProjectById(id);
@@ -125,6 +125,30 @@ projectRouter.put('/:id', async (req, res) => {
     }
   } catch (e: any) {
     console.log(e);
+    res.status(503);
+    body.error = e?.message;
+  }
+
+  res.json(body);
+});
+
+projectRouter.get('/:id/tasks', async (req: any, res) => {
+  const id = req.params.id;
+  let body: any = defaultBody;
+
+  res.set(defaultHeaders);
+  try {
+    const tasks = await selectTasksByProjectId(id);
+    if (!tasks) {
+      res.status(404);
+      body.error = 'Tasks not Found.';
+    } else {
+      console.log(tasks);
+      body.success = true;
+      body.data = { name: tasks[0].projectName, tasks };
+      res.status(200);
+    }
+  } catch (e: any) {
     res.status(503);
     body.error = e?.message;
   }
