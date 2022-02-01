@@ -28,7 +28,7 @@ projectRouter.get('/', async (req, res) => {
         id: p.id,
         name: p.name,
         description: p.description,
-        isComplete: p.is_complete,
+        isComplete: !!p.is_complete,
         priority: p.priority,
         createdAt: p.created_at,
         completedAt: p.completed_at,
@@ -143,9 +143,19 @@ projectRouter.get('/:id/tasks', async (req: any, res) => {
       res.status(404);
       body.error = 'Tasks not Found.';
     } else {
-      console.log(tasks);
+      console.log(tasks[0]);
       body.success = true;
-      body.data = { name: tasks[0].projectName, tasks };
+      body.data = {
+        name: tasks[0].project_name,
+        tasks:
+          tasks.map((t: any) => ({
+            id: t.id,
+            name: t.name,
+            description: t.description,
+            createdAt: t.created_at,
+            projectId: t.project_id,
+          })) || [],
+      };
       res.status(200);
     }
   } catch (e: any) {
