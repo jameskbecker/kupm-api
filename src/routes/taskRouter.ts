@@ -1,12 +1,10 @@
+import { Router } from 'express';
 import {
   deleteTaskById,
   editTaskById,
   insertTask,
   selectSubTasks,
-  selectTasksByProjectId,
 } from '../db/task';
-import { Router } from 'express';
-import { deleteProjectById } from 'db/project';
 
 const taskRouter = Router();
 const defaultBody = { success: false };

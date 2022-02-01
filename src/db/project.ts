@@ -1,10 +1,13 @@
-import { ResultSetHeader } from 'mysql2';
 import connection from './connection';
 import { ProjectTable } from './types';
 
 export const selectAllProjects = async () => {
   try {
-    const statement = 'SELECT * FROM Project';
+    const statement = `
+    SELECT 
+      * 
+    FROM Project
+    `;
     const [rows]: unknown[] = await connection.promise().query(statement);
     return <ProjectTable>rows;
   } catch (e) {
@@ -16,7 +19,12 @@ export const selectProjectById = async (id: string) => {
   try {
     const idValue = id === 'last' ? 'LAST_INSERT_ID()' : `"${id}"`;
     console.log(idValue);
-    const statement = `SELECT * FROM Project WHERE id = ${idValue}`;
+    const statement = `
+    SELECT 
+      * 
+    FROM Project 
+    WHERE id = ${idValue}
+    `;
     const [[project]]: any = await connection.promise().query(statement);
 
     return project;
