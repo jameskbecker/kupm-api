@@ -15,6 +15,21 @@ export const selectAllProjects = async () => {
   }
 };
 
+export const selectProjectNameById = async (id: string) => {
+  try {
+    const statement = `
+    SELECT 
+      name 
+    FROM Project
+    WHERE Project.id = "${id}"
+    `;
+    const [rows]: unknown[] = await connection.promise().query(statement);
+    return (<ProjectTable>rows)[0].name;
+  } catch (e) {
+    console.error('selectProjectNameById', e);
+  }
+};
+
 export const selectProjectById = async (id: string) => {
   try {
     const idValue = id === 'last' ? 'LAST_INSERT_ID()' : `"${id}"`;

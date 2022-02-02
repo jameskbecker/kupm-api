@@ -3,6 +3,7 @@ import {
   deleteTaskById,
   editTaskById,
   insertTask,
+  selectParentNameById,
   selectSubTasks,
 } from '../db/task';
 
@@ -18,12 +19,15 @@ taskRouter.get('/:id/subtasks', async (req, res) => {
   let body: any = defaultBody;
   res.set(defaultHeaders);
   try {
+    const parent = await selectParentNameById(req.params.id);
+    if (!parent) {
+    }
     subtasks = await selectSubTasks(req.params.id);
-    console.log('`', subtasks);
+
     body.success = true;
     body.data = {
-      projectName: subtasks[0]?.project_name,
-      parentName: subtasks[0]?.parent_name,
+      projectName: parent.project_name,
+      parentName: parent.name,
       subtasks:
         subtasks?.map((t: any) => ({
           id: t.id,

@@ -5,6 +5,7 @@ import {
   insertProject,
   selectAllProjects,
   selectProjectById,
+  selectProjectNameById,
 } from '../db/project';
 import { selectTasksByProjectId } from '../db/task';
 
@@ -138,15 +139,19 @@ projectRouter.get('/:id/tasks', async (req: any, res) => {
 
   res.set(defaultHeaders);
   try {
+    const projectName = await selectProjectNameById(id);
+
+    if (!projectName) {
+    }
+
     const tasks = await selectTasksByProjectId(id);
     if (!tasks) {
       res.status(404);
       body.error = 'Tasks not Found.';
     } else {
-      console.log(tasks[0]);
       body.success = true;
       body.data = {
-        name: tasks[0].project_name,
+        name: projectName,
         tasks:
           tasks.map((t: any) => ({
             id: t.id,

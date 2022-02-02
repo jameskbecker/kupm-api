@@ -1,5 +1,25 @@
 import connection from './connection';
 
+export const selectParentNameById = async (parentId: string) => {
+  try {
+    const statement = `
+    SELECT 
+      ParentTask.name,
+      Project.name as project_name
+    FROM Task AS ParentTask
+
+    INNER JOIN Project
+    ON Project.id = ParentTask.project_id
+
+    WHERE ParentTask.id = "${parentId}" 
+    `;
+    const [rows]: unknown[] = await connection.promise().query(statement);
+    return (<any>rows)[0];
+  } catch (e) {
+    console.error('selectParentNameById', e);
+  }
+};
+
 export const selectTasksByProjectId = async (id: string) => {
   try {
     const statement = `
