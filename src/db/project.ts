@@ -70,7 +70,13 @@ export const editProjectById = async (id: string, payload: any) => {
   const editableColumns = ['name', 'description', 'is_complete', 'priority'];
 
   editableColumns.forEach(
-    (k) => payload[k] && values.push(`${k} = "${payload[k]}"`)
+    (k) =>
+      payload.hasOwnProperty(k) &&
+      values.push(
+        `${k} = "${
+          typeof payload[k] === 'boolean' ? Number(payload[k]) : payload[k]
+        }"`
+      )
   );
 
   try {
