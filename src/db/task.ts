@@ -29,6 +29,7 @@ export const selectTasksByProjectId = async (id: string) => {
       Task.name,
       Task.description,
       Task.created_at,
+      Task.is_complete,
 
       Project.id AS project_id,
       Project.name AS project_name
@@ -130,10 +131,16 @@ export const deleteTaskById = async (id: string) => {
 
 export const editTaskById = async (id: string, payload: any) => {
   const values: string[] = [];
-  const editableColumns = ['name', 'description'];
+  const editableColumns = ['name', 'description', 'is_complete'];
 
   editableColumns.forEach(
-    (k) => payload[k] && values.push(`${k} = "${payload[k]}"`)
+    (k) =>
+      payload.hasOwnProperty(k) &&
+      values.push(
+        `${k} = "${
+          typeof payload[k] === 'boolean' ? Number(payload[k]) : payload[k]
+        }"`
+      )
   );
 
   try {

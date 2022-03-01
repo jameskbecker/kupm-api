@@ -157,6 +157,7 @@ projectRouter.get('/:id/tasks', async (req: any, res) => {
             id: t.id,
             name: t.name,
             description: t.description,
+            isComplete: Boolean(t.is_complete),
             createdAt: t.created_at,
             projectId: t.project_id,
           })) || [],

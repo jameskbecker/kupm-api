@@ -33,8 +33,9 @@ taskRouter.get('/:id/subtasks', async (req, res) => {
           id: t.id,
           name: t.name,
           description: t.description,
+          isComplete: Boolean(t.is_complete),
           createdAt: t.created_at,
-          projectId: parent.project_id,
+          projectId: t.project_id,
         })) || [],
     };
     res.status(200);
