@@ -4,8 +4,8 @@ import { ProjectTable } from './types';
 export const selectAllProjects = async () => {
   try {
     const statement = `
-    SELECT 
-      * 
+    SELECT
+      *
     FROM Project
     `;
     const [rows]: unknown[] = await connection.promise().query(statement);
@@ -50,8 +50,14 @@ export const selectProjectById = async (id: string) => {
 
 export const deleteProjectById = async (id: string) => {
   try {
-    const statement = `DELETE FROM Project WHERE id = "${id}"`;
-    const [[project]]: any = await connection.promise().query(statement);
+    const TaskStatement = `
+    DELETE FROM TASK WHERE Task.project_id = "${id}"
+    `;
+    const ProjectStatement = `  
+    DELETE FROM Project WHERE id = "${id}"
+    `;
+    await connection.promise().query(TaskStatement);
+    const [[project]]: any = await connection.promise().query(ProjectStatement);
 
     return project;
   } catch (e) {
@@ -93,7 +99,13 @@ export const insertProject = async (payload: any) => {
   const values = Object.values(data).join(',');
 
   try {
-    const statement = `INSERT INTO Project (${columns}) VALUES (${values})`;
+    const statement = `
+    INSERT INTO Project (
+      ${columns}
+    ) 
+    VALUES (
+      ${values}
+    )`;
     const results = await connection.promise().query(statement);
 
     return results[0];

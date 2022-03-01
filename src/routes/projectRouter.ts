@@ -25,7 +25,7 @@ projectRouter.get('/', async (req, res) => {
 
     body.success = true;
     body.data =
-      projects?.map((p) => ({
+      projects?.map((p: any) => ({
         id: p.id,
         name: p.name,
         description: p.description,

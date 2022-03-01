@@ -5,6 +5,7 @@ export const selectParentNameById = async (parentId: string) => {
     const statement = `
     SELECT 
       ParentTask.name,
+      Project.id as project_id,
       Project.name as project_name
     FROM Task AS ParentTask
 
@@ -51,6 +52,7 @@ export const selectSubTasks = async (id: string) => {
   try {
     const statement = `
     SELECT 
+      SubTask.id,
 	    SubTask.name,
       SubTask.description,
       SubTask.created_at,
@@ -60,7 +62,7 @@ export const selectSubTasks = async (id: string) => {
 
     FROM Task AS SubTask
  
-    INNER JOIN Task as ParentTask 
+    INNER JOIN Task AS ParentTask 
       ON ParentTask.id = SubTask.parent_task_id
     
     INNER JOIN Project
