@@ -12,4 +12,9 @@ projectRouter.delete('/:id', projectController.deleteProjectById);
 
 projectRouter.get('/:id/tasks', projectController.getProjectTasks);
 
+projectRouter.get('/:id/activity', () => {});
+
+projectRouter.get('/:id/members', () => {});
+projectRouter.get('/:id/members/invite', () => {});
+
 export default projectRouter;

@@ -10,4 +10,7 @@ taskRouter.delete('/:id', taskController.deleteTaskById);
 
 taskRouter.get('/:id/subtasks', taskController.getSubtasks);
 
+taskRouter.get('/:id/comments', () => {});
+taskRouter.post('/:id/comments', () => {});
+
 export default taskRouter;
