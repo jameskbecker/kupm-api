@@ -115,7 +115,7 @@ export const insertTask = async (payload: any) => {
   }
 };
 
-export const deleteTaskById = async (id: string) => {
+export const deleteTask = async (id: string) => {
   try {
     const statement = `
     DELETE FROM Task
@@ -129,7 +129,7 @@ export const deleteTaskById = async (id: string) => {
   }
 };
 
-export const editTaskById = async (id: string, payload: any) => {
+export const updateTask = async (id: string, payload: any) => {
   const values: string[] = [];
   const editableColumns = ['name', 'description', 'is_complete'];
 

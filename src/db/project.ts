@@ -59,7 +59,7 @@ export const selectProjectById = async (id: string) => {
   }
 };
 
-export const deleteProjectById = async (id: string) => {
+export const deleteProject = async (id: string) => {
   try {
     const TaskStatement = `
     DELETE FROM TASK WHERE Task.project_id = "${id}"
@@ -76,7 +76,7 @@ export const deleteProjectById = async (id: string) => {
   }
 };
 
-export const editProjectById = async (id: string, payload: any) => {
+export const updateProject = async (id: string, payload: any) => {
   const values: string[] = [];
   const editableColumns = ['name', 'description', 'is_complete', 'priority'];
 
