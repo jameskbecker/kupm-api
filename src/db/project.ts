@@ -4,9 +4,20 @@ import { ProjectTable } from './types';
 export const selectAllProjects = async () => {
   try {
     const statement = `
-    SELECT
-      *
+    SELECT 
+      Project.id, 
+      Project.name, 
+      Project.description, 
+      Project.is_complete, 
+      Project.priority, 
+      Project.created_at,
+
+      Owner.first_name AS owner_first_name,
+      Owner.last_name AS owner_last_name
+
     FROM Project
+    INNER JOIN User AS Owner
+      ON Project.owner_id = Owner.id
     `;
     const [rows]: unknown[] = await connection.promise().query(statement);
     return <ProjectTable>rows;
