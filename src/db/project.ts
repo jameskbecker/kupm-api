@@ -17,7 +17,9 @@ export const selectAllProjects = async () => {
 
     FROM Project
     INNER JOIN User AS Owner
-      ON Project.owner_id = Owner.id
+      ON Project.created_by_user_id = Owner.id
+
+    ORDER BY Project.created_at DESC
     `;
     const [rows]: unknown[] = await connection.promise().query(statement);
     return <ProjectTable>rows;

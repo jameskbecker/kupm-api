@@ -5,8 +5,8 @@ import {
   selectAllProjects,
   selectProjectById,
   selectProjectNameById,
-} from 'db/project';
-import { selectTasksByProjectId } from 'db/task';
+} from '../db/project';
+import { selectTasksByProjectId } from '../db/task';
 import { Request, Response } from 'express';
 
 const defaultBody = { success: false };

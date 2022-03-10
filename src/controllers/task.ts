@@ -4,7 +4,7 @@ import {
   selectParentNameById,
   selectSubTasks,
   updateTask,
-} from 'db/task';
+} from '../db/task';
 import { Request, Response } from 'express';
 
 const defaultBody = { success: false };

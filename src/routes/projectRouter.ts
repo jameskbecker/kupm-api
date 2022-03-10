@@ -1,4 +1,4 @@
-import projectController from 'controllers/project';
+import projectController from '../controllers/project';
 import { Router } from 'express';
 
 const projectRouter = Router();
