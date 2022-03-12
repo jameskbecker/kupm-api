@@ -27,3 +27,16 @@ export const insertInvite = async () => {
     console.error('insertInvite', e);
   }
 };
+
+export const acceptInvite = async () => {
+  try {
+    const statement = `
+    UPDATE Invite
+    SET is_accepted = true
+    WHERE id = "24e16be8-a238-11ec-a815-e0077f688b83"
+    `;
+    await connection.promise().query(statement);
+  } catch (e) {
+    console.error('acceptInvite', e);
+  }
+};
