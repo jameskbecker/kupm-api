@@ -1,13 +1,16 @@
 import {
-  deleteProject,
   updateProject,
   insertProject,
   selectAllProjects,
   selectProjectById,
   selectProjectNameById,
-  selectProjectMembers,
-} from '../db/project';
-import { selectTasksByProjectId } from '../db/task';
+  deleteProjectById,
+} from '../db/queries/project';
+import {
+  deleteTaskByProjectId,
+  selectTasksByProjectId,
+} from '../db/queries/task';
+import { selectUserProjects } from '../db/queries/userProject';
 import { Request, Response } from 'express';
 
 const defaultBody = { success: false };
@@ -111,13 +114,14 @@ const updateProjectById = async (req: Request, res: Response) => {
   res.json(body);
 };
 
-const deleteProjectById = async (req: Request, res: Response) => {
+const deleteProject = async (req: Request, res: Response) => {
   const id = req.params.id;
   let body: any = defaultBody;
   res.set(defaultHeaders);
 
   try {
-    const project = await deleteProject(id);
+    await deleteTaskByProjectId(id);
+    const project = await deleteProjectById(id);
     if (!project) {
       res.status(404);
       body.error = 'Project not Found.';
@@ -178,7 +182,7 @@ const getProjectMembers = async (req: Request, res: Response) => {
   let body: any = defaultBody;
   res.set(defaultHeaders);
   try {
-    members = await selectProjectMembers();
+    members = await selectUserProjects();
 
     body.success = true;
     console.log(members);
@@ -209,7 +213,7 @@ const projectController = {
   postProject,
   getProjectById,
   updateProjectById,
-  deleteProjectById,
+  deleteProject,
   getProjectTasks,
   getProjectMembers,
 };

@@ -1,4 +1,4 @@
-import { insertInvite } from '../db/invite';
+import { insertInvite } from '../db/queries/invite';
 import { Request, Response } from 'express';
 
 const defaultBody = { success: false };

@@ -1,4 +1,4 @@
-import connection from './connection';
+import connection from '../connection';
 
 export const selectParentNameById = async (parentId: string) => {
   try {
@@ -115,7 +115,7 @@ export const insertTask = async (payload: any) => {
   }
 };
 
-export const deleteTask = async (id: string) => {
+export const deleteTaskById = async (id: string) => {
   try {
     const statement = `
     DELETE FROM Task
@@ -126,6 +126,17 @@ export const deleteTask = async (id: string) => {
     return task;
   } catch (e) {
     console.error('deleteTaskById', e);
+  }
+};
+
+export const deleteTaskByProjectId = async (id: string) => {
+  try {
+    const statement = `
+    DELETE FROM TASK WHERE Task.project_id = "${id}"
+    `;
+    await connection.promise().query(statement);
+  } catch (e) {
+    console.error('deleteTaskByProjectId', e);
   }
 };
 

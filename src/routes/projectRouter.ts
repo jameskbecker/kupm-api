@@ -8,7 +8,7 @@ projectRouter.post('/', projectController.postProject);
 
 projectRouter.get('/:id', projectController.getProjectById);
 projectRouter.put('/:id', projectController.updateProjectById);
-projectRouter.delete('/:id', projectController.deleteProjectById);
+projectRouter.delete('/:id', projectController.deleteProject);
 
 projectRouter.get('/:id/tasks', projectController.getProjectTasks);
 

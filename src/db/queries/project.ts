@@ -1,5 +1,5 @@
-import connection from './connection';
-import { ProjectTable } from './types';
+import connection from '../connection';
+import { ProjectTable } from '../types';
 
 export const selectAllProjects = async () => {
   try {
@@ -61,16 +61,12 @@ export const selectProjectById = async (id: string) => {
   }
 };
 
-export const deleteProject = async (id: string) => {
+export const deleteProjectById = async (id: string) => {
   try {
-    const TaskStatement = `
-    DELETE FROM TASK WHERE Task.project_id = "${id}"
-    `;
-    const ProjectStatement = `  
+    const statement = `  
     DELETE FROM Project WHERE id = "${id}"
     `;
-    await connection.promise().query(TaskStatement);
-    const [[project]]: any = await connection.promise().query(ProjectStatement);
+    const [[project]]: any = await connection.promise().query(statement);
 
     return project;
   } catch (e) {
@@ -130,31 +126,5 @@ export const insertProject = async (payload: any) => {
     return results[0];
   } catch (e) {
     throw e;
-  }
-};
-
-export const selectProjectMembers = async () => {
-  try {
-    const statement = `
-    SELECT 
-      UserProject.id,
-      UserProject.is_owner,
-      UserProject.can_read, 
-      UserProject.can_write, 
-      UserProject.project_id, 
-      UserProject.created_at,
-      UserProject.user_id,
-      User.first_name, 
-      User.last_name
-    FROM UserProject
-    INNER JOIN User
-      ON User.id = UserProject.user_id
-    WHERE 
-      project_id = "6f35f124-46d4-11ec-8b6c-d2f44fac733b"
-    `;
-    const [rows]: unknown[] = await connection.promise().query(statement);
-    return <any>rows;
-  } catch (e) {
-    console.error('selectProjectMembers', e);
   }
 };
