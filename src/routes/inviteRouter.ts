@@ -1,8 +1,9 @@
+import inviteController from '../controllers/invite';
 import { Router } from 'express';
 
 const inviteRouter = Router();
 
-inviteRouter.post('/', () => {});
+inviteRouter.post('/', inviteController.postInvite);
 
 inviteRouter.get('/:id/join', () => {});
 
