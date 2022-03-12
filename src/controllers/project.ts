@@ -5,6 +5,7 @@ import {
   selectAllProjects,
   selectProjectById,
   selectProjectNameById,
+  selectProjectMembers,
 } from '../db/project';
 import { selectTasksByProjectId } from '../db/task';
 import { Request, Response } from 'express';
@@ -172,6 +173,37 @@ const getProjectTasks = async (req: Request, res: Response) => {
   res.json(body);
 };
 
+const getProjectMembers = async (req: Request, res: Response) => {
+  let members;
+  let body: any = defaultBody;
+  res.set(defaultHeaders);
+  try {
+    members = await selectProjectMembers();
+
+    body.success = true;
+    console.log(members);
+    body.data =
+      members?.map((m: any) => ({
+        id: m.id,
+        firstName: m.first_name,
+        lastName: m.last_name,
+        isOwner: Boolean(m.is_owner),
+        canRead: Boolean(m.can_read),
+        canWrite: Boolean(m.can_write),
+        projectId: m.project_id,
+        joinedAt: m.created_at,
+        userId: m.user_id,
+      })) || [];
+    res.status(200);
+  } catch (e: any) {
+    console.log(e);
+    body.error = e?.message;
+    res.status(503);
+  }
+
+  res.json(body);
+};
+
 const projectController = {
   getProject,
   postProject,
@@ -179,5 +211,6 @@ const projectController = {
   updateProjectById,
   deleteProjectById,
   getProjectTasks,
+  getProjectMembers,
 };
 export default projectController;
