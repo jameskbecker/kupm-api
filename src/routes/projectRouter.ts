@@ -12,7 +12,7 @@ projectRouter.delete('/:id', projectController.deleteProject);
 
 projectRouter.get('/:id/tasks', projectController.getProjectTasks);
 
-projectRouter.get('/:id/activity', () => {});
+projectRouter.get('/:id/activity', projectController.getProjectActivity);
 
 projectRouter.get('/:id/members', projectController.getProjectMembers);
 //projectRouter.get('/:id/members/invite', () => {});

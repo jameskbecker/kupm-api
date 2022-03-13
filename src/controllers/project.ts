@@ -12,6 +12,7 @@ import {
 } from '../db/queries/task';
 import { selectUserProjects } from '../db/queries/userProject';
 import { Request, Response } from 'express';
+import { selectInviteByProjectId } from '../db/queries/invite';
 
 const defaultBody = { success: false };
 const defaultHeaders = {
@@ -208,6 +209,37 @@ const getProjectMembers = async (req: Request, res: Response) => {
   res.json(body);
 };
 
+const getProjectActivity = async (req: Request, res: Response) => {
+  let invites;
+  let body: any = defaultBody;
+  res.set(defaultHeaders);
+  try {
+    invites = await selectInviteByProjectId('');
+    if (!invites) {
+      console.log('invite data error');
+      return;
+    }
+    const formattedInvites = invites.map((i) => {
+      return {
+        heading: `${i.last_name.toUpperCase()}, ${i.first_name} Sent an Invite`,
+        subheading: i.sent_at,
+        body: ``,
+      };
+    });
+
+    body.success = true;
+
+    body.data = [...formattedInvites];
+    res.status(200);
+  } catch (e: any) {
+    console.log(e);
+    body.error = e?.message;
+    res.status(503);
+  }
+
+  res.json(body);
+};
+
 const projectController = {
   getProject,
   postProject,
@@ -216,5 +248,6 @@ const projectController = {
   deleteProject,
   getProjectTasks,
   getProjectMembers,
+  getProjectActivity,
 };
 export default projectController;

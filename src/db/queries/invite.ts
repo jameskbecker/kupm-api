@@ -1,3 +1,4 @@
+import { FieldPacket, RowDataPacket } from 'mysql2';
 import connection from '../connection';
 
 export const insertInvite = async () => {
@@ -41,16 +42,33 @@ export const acceptInvite = async () => {
   }
 };
 
-export const selectInviteByProjectId = async () => {
+export const selectInviteByProjectId = async (projectId: string) => {
   try {
     const statement = `
-    SELECT id, project_id
+    SELECT 
+      Invite.id,
+      Invite.project_id,
+      Invite.sent_at,
+
+      Project.name,
+
+      Sender.first_name,
+      Sender.last_name
     FROM Invite
-    SET is_accepted = true
-    WHERE id = "24e16be8-a238-11ec-a815-e0077f688b83"
+
+    INNER JOIN Project
+      ON Invite.project_id = Project.id
+
+    INNER JOIN User AS Sender
+      ON Invite.sender_id = Sender.id
+
+    WHERE Project.id = "6f35f124-46d4-11ec-8b6c-d2f44fac733b"
     `;
-    await connection.promise().query(statement);
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
+      .promise()
+      .query(statement);
+    return rows;
   } catch (e) {
-    console.error('acceptInvite', e);
+    console.error('selectInviteByProjectId', e);
   }
 };
