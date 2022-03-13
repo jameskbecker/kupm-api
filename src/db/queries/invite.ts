@@ -40,3 +40,17 @@ export const acceptInvite = async () => {
     console.error('acceptInvite', e);
   }
 };
+
+export const selectInviteByProjectId = async () => {
+  try {
+    const statement = `
+    SELECT id, project_id
+    FROM Invite
+    SET is_accepted = true
+    WHERE id = "24e16be8-a238-11ec-a815-e0077f688b83"
+    `;
+    await connection.promise().query(statement);
+  } catch (e) {
+    console.error('acceptInvite', e);
+  }
+};

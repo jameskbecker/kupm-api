@@ -5,6 +5,6 @@ const inviteRouter = Router();
 
 inviteRouter.post('/', inviteController.postInvite);
 
-inviteRouter.get('/:id/join', () => {});
+inviteRouter.post('/:id/join', inviteController.postInviteJoin);
 
 export default inviteRouter;

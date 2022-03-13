@@ -1,4 +1,5 @@
-import connection from 'db/connection';
+import { FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
+import connection from '../connection';
 
 export const selectUserProjects = async () => {
   try {
@@ -19,9 +20,44 @@ export const selectUserProjects = async () => {
       WHERE 
         project_id = "6f35f124-46d4-11ec-8b6c-d2f44fac733b"
     `;
-    const [rows]: unknown[] = await connection.promise().query(statement);
-    return <any>rows;
+    const rows: [RowDataPacket[], FieldPacket[]] = await connection
+      .promise()
+      .query(statement);
+
+    return <any>rows[0];
   } catch (e) {
-    console.error('selectProjectMembers', e);
+    console.error('selectUserProjects', e);
+  }
+};
+
+export const insertUserProject = async (userId: string) => {
+  try {
+    const statement = `
+      INSERT INTO UserProject (
+        id, 
+        is_owner,
+        can_read, 
+        can_write,
+        created_at,
+        project_id, 
+        user_id
+      ) 
+      VALUES (
+        uuid(),
+        false,
+        true,
+        true,
+        current_time(),
+        "6f35f124-46d4-11ec-8b6c-d2f44fac733b",
+        "${userId}"
+      )
+      `;
+    const ok: [ResultSetHeader, FieldPacket[]] = await connection
+      .promise()
+      .query(statement);
+
+    return null;
+  } catch (e) {
+    console.error('inserUserProject', e);
   }
 };

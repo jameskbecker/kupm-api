@@ -1,5 +1,5 @@
 import {
-  deleteTask,
+  deleteTaskById,
   insertTask,
   selectParentNameById,
   selectSubTasks,
@@ -55,13 +55,13 @@ const updateTaskById = async (req: Request, res: Response) => {
   res.json(body);
 };
 
-const deleteTaskById = async (req: Request, res: Response) => {
+const deleteTask = async (req: Request, res: Response) => {
   const id = req.params.id;
   let body: any = defaultBody;
   res.set(defaultHeaders);
 
   try {
-    const task = await deleteTask(id);
+    const task = await deleteTaskById(id);
     if (!task) {
       res.status(404);
       body.error = 'Task not Found.';
@@ -115,7 +115,7 @@ const getSubtasks = async (req: Request, res: Response) => {
 const taskController = {
   postTask,
   updateTaskById,
-  deleteTaskById,
+  deleteTask,
   getSubtasks,
 };
 export default taskController;
