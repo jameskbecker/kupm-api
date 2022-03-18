@@ -72,3 +72,34 @@ export const selectInviteByProjectId = async (projectId: string) => {
     console.error('selectInviteByProjectId', e);
   }
 };
+
+export const selectInvitesByUserId = async (projectId: string) => {
+  try {
+    const statement = `
+    SELECT 
+      Invite.id,
+      Invite.project_id,
+      Invite.sent_at,
+
+      Project.name AS project_name,
+
+      Sender.first_name,
+      Sender.last_name
+    FROM Invite
+
+    INNER JOIN Project
+      ON Invite.project_id = Project.id
+
+    INNER JOIN User AS Sender
+      ON Invite.sender_id = Sender.id
+
+    ${/*WHERE Project.id = "6f35f124-46d4-11ec-8b6c-d2f44fac733b"*/ ''}
+    `;
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
+      .promise()
+      .query(statement);
+    return rows;
+  } catch (e) {
+    console.error('selectInvitesByUserId', e);
+  }
+};

@@ -1,5 +1,30 @@
 import connection from '../connection';
 
+export const selectAllUserTasks = async (id: string) => {
+  try {
+    const statement = `
+    SELECT
+      Task.id,
+      Task.name,
+      Task.description,
+      Task.created_at,
+      Project.id AS project_id,
+      Project.name AS project_name
+    FROM Task
+    INNER JOIN Project
+      ON Task.project_id = Project.id
+    ${/*WHERE user_id = "${userId}"*/ ''}
+    ${/*ORDER BY Task.deadline_at DESC*/ ''}
+    LIMIT 25
+    `;
+    const [tasks]: any = await connection.promise().query(statement);
+
+    return tasks;
+  } catch (e) {
+    console.error('selectAllUserTasks', e);
+  }
+};
+
 export const selectParentNameById = async (parentId: string) => {
   try {
     const statement = `
