@@ -32,12 +32,13 @@ export const selectProjectNameById = async (id: string) => {
   try {
     const statement = `
     SELECT 
-      name 
+      name,
+      description 
     FROM Project
     WHERE Project.id = "${id}"
     `;
     const [rows]: unknown[] = await connection.promise().query(statement);
-    return (<ProjectTable>rows)[0].name;
+    return (<ProjectTable>rows)[0];
   } catch (e) {
     console.error('selectProjectNameById', e);
   }

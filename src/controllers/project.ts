@@ -145,9 +145,9 @@ const getProjectTasks = async (req: Request, res: Response) => {
 
   res.set(defaultHeaders);
   try {
-    const projectName = await selectProjectNameById(id);
+    const { name, description }: any = await selectProjectNameById(id);
 
-    if (!projectName) {
+    if (!name || !description) {
     }
 
     const tasks = await selectTasksByProjectId(id);
@@ -157,7 +157,8 @@ const getProjectTasks = async (req: Request, res: Response) => {
     } else {
       body.success = true;
       body.data = {
-        name: projectName,
+        name,
+        description,
         tasks:
           tasks.map((t: any) => ({
             id: t.id,
