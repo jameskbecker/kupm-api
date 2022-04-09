@@ -13,6 +13,7 @@ import {
 import { selectUserProjects } from '../db/queries/userProject';
 import { Request, Response } from 'express';
 import { selectInviteByProjectId } from '../db/queries/invite';
+import { format } from 'date-fns';
 
 const defaultBody = { success: false };
 const defaultHeaders = {
@@ -197,7 +198,7 @@ const getProjectMembers = async (req: Request, res: Response) => {
         canRead: Boolean(m.can_read),
         canWrite: Boolean(m.can_write),
         projectId: m.project_id,
-        joinedAt: m.created_at,
+        joinedAt: format(new Date(m.created_at), "dd/MM/y 'at' hh:mm aa"),
         userId: m.user_id,
       })) || [];
     res.status(200);
