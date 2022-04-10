@@ -22,6 +22,7 @@ const defaultHeaders = {
 };
 
 const getProject = async (req: Request, res: Response) => {
+  res.json({ hello: 'world' });
   let projects;
   let body: any = defaultBody;
   res.set(defaultHeaders);

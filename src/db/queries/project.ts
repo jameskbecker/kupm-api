@@ -113,7 +113,7 @@ export const insertProject = async (payload: any) => {
 
   const columns = Object.keys(data).join(',');
   const values = Object.values(data).join(',');
-
+  console.log('insert');
   try {
     const statement = `
     INSERT INTO Project (
