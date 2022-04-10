@@ -26,7 +26,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist",
+    "start": "node dist",
     "dev:start": "ts-node-dev src/app.ts"
   },
   "engines": {
