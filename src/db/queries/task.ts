@@ -1,6 +1,8 @@
-import connection from '../connection';
+import { createConnection } from 'mysql2';
+import connectionOptions from '../connection';
 
 export const selectAllUserTasks = async (id: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     SELECT
@@ -18,14 +20,16 @@ export const selectAllUserTasks = async (id: string) => {
     LIMIT 25
     `;
     const [tasks]: any = await connection.promise().query(statement);
-
+    connection.end();
     return tasks;
   } catch (e) {
     console.error('selectAllUserTasks', e);
+    connection.end();
   }
 };
 
 export const selectParentNameById = async (parentId: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     SELECT 
@@ -40,13 +44,16 @@ export const selectParentNameById = async (parentId: string) => {
     WHERE ParentTask.id = "${parentId}" 
     `;
     const [rows]: unknown[] = await connection.promise().query(statement);
+    connection.end();
     return (<any>rows)[0];
   } catch (e) {
     console.error('selectParentNameById', e);
+    connection.end();
   }
 };
 
 export const selectTasksByProjectId = async (id: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     SELECT
@@ -67,14 +74,16 @@ export const selectTasksByProjectId = async (id: string) => {
     WHERE project_id = "${id}"
     `;
     const [tasks]: any = await connection.promise().query(statement);
-
+    connection.end();
     return tasks;
   } catch (e) {
     console.error('selectTasksByProjectId', e);
+    connection.end();
   }
 };
 
 export const selectSubTasks = async (id: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     SELECT 
@@ -98,14 +107,16 @@ export const selectSubTasks = async (id: string) => {
     `;
 
     const [tasks]: any = await connection.promise().query(statement);
-
+    connection.end();
     return tasks;
   } catch (e) {
     console.error('selectSubTasks', e);
+    connection.end();
   }
 };
 
 export const insertTask = async (payload: any) => {
+  const connection = createConnection(connectionOptions());
   const { name, description, priority, projectId, parentId } = payload;
   const data = {
     id: 'uuid()',
@@ -133,39 +144,46 @@ export const insertTask = async (payload: any) => {
     )`;
 
     const results = await connection.promise().query(statement);
-
+    connection.end();
     return results[0];
   } catch (e) {
-    throw e;
+    console.log(e);
+    connection.end();
   }
 };
 
 export const deleteTaskById = async (id: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     DELETE FROM Task
     WHERE id = "${id}"
     `;
     const [[task]]: any = await connection.promise().query(statement);
-
+    connection.end();
     return task;
   } catch (e) {
     console.error('deleteTaskById', e);
+    connection.end();
   }
 };
 
 export const deleteTaskByProjectId = async (id: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     DELETE FROM TASK WHERE Task.project_id = "${id}"
     `;
     await connection.promise().query(statement);
+    connection.end();
   } catch (e) {
     console.error('deleteTaskByProjectId', e);
+    connection.end();
   }
 };
 
 export const updateTask = async (id: string, payload: any) => {
+  const connection = createConnection(connectionOptions());
   const values: string[] = [];
   const editableColumns = ['name', 'description', 'is_complete'];
 
@@ -186,9 +204,10 @@ export const updateTask = async (id: string, payload: any) => {
     WHERE id = "${id}"
     `;
     const [[task]]: any = await connection.promise().query(statement);
-
+    connection.end();
     return task;
   } catch (e) {
     console.error('editTaskById', e);
+    connection.end();
   }
 };

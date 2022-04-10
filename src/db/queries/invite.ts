@@ -1,7 +1,8 @@
-import { FieldPacket, RowDataPacket } from 'mysql2';
-import connection from '../connection';
+import { createConnection, FieldPacket, RowDataPacket } from 'mysql2';
+import connectionOptions from '../connection';
 
 export const insertInvite = async () => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     INSERT INTO Invite (
@@ -24,12 +25,15 @@ export const insertInvite = async () => {
     )
     `;
     await connection.promise().query(statement);
+    connection.end();
   } catch (e) {
     console.error('insertInvite', e);
+    connection.end();
   }
 };
 
 export const acceptInvite = async () => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     UPDATE Invite
@@ -37,12 +41,15 @@ export const acceptInvite = async () => {
     WHERE id = "24e16be8-a238-11ec-a815-e0077f688b83"
     `;
     await connection.promise().query(statement);
+    connection.end();
   } catch (e) {
     console.error('acceptInvite', e);
+    connection.end();
   }
 };
 
 export const selectInviteByProjectId = async (projectId: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     SELECT 
@@ -67,13 +74,16 @@ export const selectInviteByProjectId = async (projectId: string) => {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
       .promise()
       .query(statement);
+    connection.end();
     return rows;
   } catch (e) {
     console.error('selectInviteByProjectId', e);
+    connection.end();
   }
 };
 
 export const selectInvitesByUserId = async (projectId: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     SELECT 
@@ -98,8 +108,10 @@ export const selectInvitesByUserId = async (projectId: string) => {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
       .promise()
       .query(statement);
+    connection.end();
     return rows;
   } catch (e) {
     console.error('selectInvitesByUserId', e);
+    connection.end();
   }
 };

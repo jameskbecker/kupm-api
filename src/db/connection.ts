@@ -1,6 +1,6 @@
 import mysql from 'mysql2';
 
-const connection = mysql.createConnection(
+const connectionOptions = () =>
   !process.env.PORT
     ? {
         host: 'localhost',
@@ -13,7 +13,6 @@ const connection = mysql.createConnection(
         user: 'bd7692682db0cf',
         password: '16cd1433',
         database: 'heroku_e3d8d90d9bda6a1',
-      }
-);
+      };
 
-export default connection;
+export default connectionOptions;

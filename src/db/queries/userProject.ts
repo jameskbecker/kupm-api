@@ -1,7 +1,13 @@
-import { FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
-import connection from '../connection';
+import {
+  createConnection,
+  FieldPacket,
+  ResultSetHeader,
+  RowDataPacket,
+} from 'mysql2';
+import connectionOptions from '../connection';
 
 export const selectUserProjects = async () => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
       SELECT 
@@ -23,14 +29,16 @@ export const selectUserProjects = async () => {
     const rows: [RowDataPacket[], FieldPacket[]] = await connection
       .promise()
       .query(statement);
-
+    connection.end();
     return <any>rows[0];
   } catch (e) {
     console.error('selectUserProjects', e);
+    connection.end();
   }
 };
 
 export const insertUserProject = async (userId: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
       INSERT INTO UserProject (
@@ -55,9 +63,10 @@ export const insertUserProject = async (userId: string) => {
     const ok: [ResultSetHeader, FieldPacket[]] = await connection
       .promise()
       .query(statement);
-
+    connection.end();
     return null;
   } catch (e) {
     console.error('inserUserProject', e);
+    connection.end();
   }
 };

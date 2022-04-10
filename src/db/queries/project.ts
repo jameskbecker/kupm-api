@@ -1,7 +1,9 @@
-import connection from '../connection';
+import { createConnection } from 'mysql2';
+import connectionOptions from '../connection';
 import { ProjectTable } from '../types';
 
 export const selectAllProjects = async () => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     SELECT 
@@ -22,13 +24,16 @@ export const selectAllProjects = async () => {
     ORDER BY Project.created_at DESC
     `;
     const [rows]: unknown[] = await connection.promise().query(statement);
+    connection.end();
     return <ProjectTable>rows;
   } catch (e) {
     console.error('selectAllProjects', e);
+    connection.end();
   }
 };
 
 export const selectProjectNameById = async (id: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
     SELECT 
@@ -38,13 +43,16 @@ export const selectProjectNameById = async (id: string) => {
     WHERE Project.id = "${id}"
     `;
     const [rows]: unknown[] = await connection.promise().query(statement);
+    connection.end();
     return (<ProjectTable>rows)[0];
   } catch (e) {
     console.error('selectProjectNameById', e);
+    connection.end();
   }
 };
 
 export const selectProjectById = async (id: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const idValue = id === 'last' ? 'LAST_INSERT_ID()' : `"${id}"`;
     console.log(idValue);
@@ -55,27 +63,31 @@ export const selectProjectById = async (id: string) => {
     WHERE id = ${idValue}
     `;
     const [[project]]: any = await connection.promise().query(statement);
-
+    connection.end();
     return project;
   } catch (e) {
     console.error('selectProjectById', e);
+    connection.end();
   }
 };
 
 export const deleteProjectById = async (id: string) => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `  
     DELETE FROM Project WHERE id = "${id}"
     `;
     const [[project]]: any = await connection.promise().query(statement);
-
+    connection.end();
     return project;
   } catch (e) {
     console.error('deleteProjectById', e);
+    connection.end();
   }
 };
 
 export const updateProject = async (id: string, payload: any) => {
+  const connection = createConnection(connectionOptions());
   const values: string[] = [];
   const editableColumns = ['name', 'description', 'is_complete', 'priority'];
 
@@ -93,14 +105,16 @@ export const updateProject = async (id: string, payload: any) => {
     const data = values.join(',');
     const statement = `UPDATE Project SET ${data} WHERE id = "${id}"`;
     const [[project]]: any = await connection.promise().query(statement);
-
+    connection.end();
     return project;
   } catch (e) {
     console.error('editProjectById', e);
+    connection.end();
   }
 };
 
 export const insertProject = async (payload: any) => {
+  const connection = createConnection(connectionOptions());
   const { name, description, priority } = payload;
   const data = {
     id: 'uuid()',
@@ -117,7 +131,7 @@ export const insertProject = async (payload: any) => {
 
   const columns = Object.keys(data).join(',');
   const values = Object.values(data).join(',');
-  console.log('insert');
+
   try {
     const statement = `
     INSERT INTO Project (
@@ -127,9 +141,10 @@ export const insertProject = async (payload: any) => {
       ${values}
     )`;
     const results = await connection.promise().query(statement);
-
+    connection.end();
     return results[0];
   } catch (e) {
-    throw e;
+    console.log(e);
+    connection.end();
   }
 };

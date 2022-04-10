@@ -1,7 +1,8 @@
-import { FieldPacket, RowDataPacket } from 'mysql2';
-import connection from '../connection';
+import { createConnection, FieldPacket, RowDataPacket } from 'mysql2';
+import connectionOptions from '../connection';
 
 export const selectUserIdByEmail = async () => {
+  const connection = createConnection(connectionOptions());
   try {
     const statement = `
       SELECT User.id
@@ -11,9 +12,10 @@ export const selectUserIdByEmail = async () => {
     const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
       .promise()
       .query(statement);
-
+    connection.end();
     return rows;
   } catch (e) {
     console.error('selectUserIdByEmail', e);
+    connection.end();
   }
 };
