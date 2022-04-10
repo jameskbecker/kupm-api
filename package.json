@@ -1,7 +1,7 @@
 {
   "name": "kupm-api",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "index.js",
   "repository": "https://github.com/jameskbecker/kupm-api.git",
   "author": "James Becker <48602730+jameskbecker@users.noreply.github.com>",
   "license": "MIT",
