@@ -6,6 +6,9 @@ const app = express();
 
 app.use(express.json());
 app.use('/api', router);
+app.get('/', (req, res) => {
+  res.json({ success: true });
+});
 
 app.listen(port, () => {
   console.log('Listening on port:', port);
