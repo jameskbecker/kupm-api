@@ -10,7 +10,7 @@ import { selectUserIdByEmail } from '../db/queries/user';
 const defaultBody = { success: false };
 const defaultHeaders = {
   'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': 'http://localhost:3000',
+  // 'Access-Control-Allow-Origin': 'http://localhost:3000',
 };
 
 const postInvite = async (req: Request, res: Response) => {

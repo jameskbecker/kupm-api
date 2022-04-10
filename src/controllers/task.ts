@@ -10,7 +10,7 @@ import { Request, Response } from 'express';
 const defaultBody = { success: false };
 const defaultHeaders = {
   'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': 'http://localhost:3000',
+  // 'Access-Control-Allow-Origin': 'http://localhost:3000',
 };
 
 const postTask = async (req: Request, res: Response) => {
