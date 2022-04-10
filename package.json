@@ -25,8 +25,8 @@
     "@types/uuid": "^8.3.1"
   },
   "scripts": {
-    "start": "ts-node src/app.ts",
-    "start2": "tsc && node ./dist",
+    "build": "tsc",
+    "start": "node dist",
     "dev:start": "ts-node-dev src/app.ts"
   },
   "engines": {
