@@ -63,7 +63,7 @@ const postProject = async (req: Request, res: Response) => {
     body.data = {};
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(500);
     body.error = e?.message;
   }
 
