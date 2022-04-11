@@ -193,9 +193,7 @@ const getProjectMembers = async (req: Request, res: Response) => {
   let body: any = defaultBody;
   res.set(defaultHeaders);
   try {
-    members = await selectUserProjectMembers(
-      '6f35f124-46d4-11ec-8b6c-d2f44fac733b'
-    );
+    members = await selectUserProjectMembers(req.params.id);
 
     body.success = true;
     console.log(members);
