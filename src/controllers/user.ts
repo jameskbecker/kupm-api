@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { selectInvitesByUserId } from '../db/queries/invite';
 import { selectAllUserTasks } from '../db/queries/task';
 import { format, formatDistance } from 'date-fns';
-import { selectUserById } from 'db/queries/user';
+import { selectUserById } from '../db/queries/user';
 
 const defaultBody = { success: false };
 const defaultHeaders = {
