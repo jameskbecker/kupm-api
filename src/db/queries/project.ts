@@ -83,11 +83,11 @@ export const updateProject = async (id: string, payload: any) => {
   }
 };
 
-export const insertProject = async (payload: any) => {
+export const insertProject = async (id: string, payload: any) => {
   const connection = createConnection(connectionOptions());
   const { name, description, priority, createdBy } = payload;
   const data = {
-    id: 'uuid()',
+    id: `"${id}"`,
     name: `"${name}"`,
     description: `"${description}"`,
     priority: `"${priority}"`,

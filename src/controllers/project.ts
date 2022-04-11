@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { Request, Response } from 'express';
+import { v4 as uuid } from 'uuid';
 import { selectInviteByProjectId } from '../db/queries/invite';
 import {
   deleteProjectById,
@@ -13,6 +14,7 @@ import {
   selectTasksByProjectId,
 } from '../db/queries/task';
 import {
+  insertUserProject,
   selectUserProjectMembers,
   selectUserProjects,
 } from '../db/queries/userProject';
@@ -60,9 +62,11 @@ const postProject = async (req: Request, res: Response) => {
   res.set(defaultHeaders);
 
   try {
-    await insertProject(req.body);
+    const projectId = uuid();
+    await insertProject(projectId, req.body);
+    await insertUserProject(projectId, req.body.createdBy);
+
     res.status(200);
-    //const project = await selectProjectById('last');
     body.success = true;
     body.data = {};
   } catch (e: any) {
