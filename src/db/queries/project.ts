@@ -13,6 +13,7 @@ export const selectAllProjects = async (userId: string) => {
       Project.is_complete, 
       Project.priority, 
       Project.created_at
+      Project.due_at
       
       FROM UserProject
 

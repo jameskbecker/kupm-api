@@ -40,6 +40,7 @@ const getProject = async (req: Request, res: Response) => {
         priority: p.priority,
         createdAt: p.created_at,
         completedAt: p.completed_at,
+        dueAt: p.due_at,
         memberGroupId: null,
         owner: '', //`${p.owner_last_name.toUpperCase()}, ${p.owner_first_name}`,
       })) || [];

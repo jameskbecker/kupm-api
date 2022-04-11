@@ -37,12 +37,12 @@ export const selectUserProjects = async () => {
   }
 };
 
-export const insertUserProject = async (userId: string) => {
+export const insertUserProject = async (projectId: string, userId: string) => {
   const connection = createConnection(connectionOptions());
   try {
     const statement = `
       INSERT INTO UserProject (
-        id, 
+        id,
         is_owner,
         can_read, 
         can_write,
@@ -56,7 +56,7 @@ export const insertUserProject = async (userId: string) => {
         true,
         true,
         current_time(),
-        "6f35f124-46d4-11ec-8b6c-d2f44fac733b",
+        "${projectId}",
         "${userId}"
       )
       `;
