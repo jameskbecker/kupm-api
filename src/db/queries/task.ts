@@ -122,12 +122,12 @@ export const insertTask = async (payload: any) => {
     id: 'uuid()',
     name: `"${name}"`,
     description: `"${description}"`,
-    is_main: !!parentId,
+    priority: priority,
     is_complete: 'false',
-    order_number: priority,
-    created_at: 'unix_timestamp()',
     completed_at: 'NULL',
-    // parent_task_id: `"${parentId ? parentId : 'NULL'}"`,
+    created_at: 'current_time()',
+    updated_at: 'current_time()',
+    parent_task_id: `"${parentId ? parentId : 'NULL'}"`,
     project_id: `"${projectId}"`,
   };
 
