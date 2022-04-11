@@ -136,7 +136,7 @@ export const updateProject = async (id: string, payload: any) => {
 
 export const insertProject = async (payload: any) => {
   const connection = createConnection(connectionOptions());
-  const { name, description, priority } = payload;
+  const { name, description, priority, createdBy } = payload;
   const data = {
     id: 'uuid()',
     name: `"${name}"`,
@@ -147,7 +147,7 @@ export const insertProject = async (payload: any) => {
 
     created_at: 'current_time()',
     updated_at: 'current_time()',
-    created_by_user_id: '"39aeec9a-b8bb-11ec-a034-02e4fd6e79c6"',
+    created_by_user_id: `"${createdBy}"`,
   };
 
   const columns = Object.keys(data).join(',');
