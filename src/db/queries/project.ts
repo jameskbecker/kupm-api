@@ -21,10 +21,11 @@ export const selectAllProjects = async (userId: string) => {
 
       INNER JOIN User AS Owner
         ON Project.created_by_user_id = Owner.id
+
+      WHERE user_id = "${userId}"
   
       ORDER BY Project.created_at DESC
 
-      WHERE user_id = "${userId}"
     `;
 
     // const statement = `
