@@ -41,7 +41,7 @@ const postInviteJoin = async (req: Request, res: Response) => {
     if (!userId) {
       console.log('no user id');
     }
-    await insertUserProject(userId);
+    await insertUserProject('f', userId);
     await acceptInvite();
     //await selectInviteByProjectId();
     res.status(200);
