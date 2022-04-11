@@ -49,8 +49,8 @@ const getNotifications = async (req: Request, res: Response) => {
   res.set(defaultHeaders);
 
   try {
-    const invites = await selectInvitesByUserId('');
-    const comments = await selectCommentsByUserId('');
+    const invites = await selectInvitesByUserId(req.params.id);
+    const comments = await selectCommentsByUserId(req.params.id);
     if (!invites || !comments) {
       return;
     }
