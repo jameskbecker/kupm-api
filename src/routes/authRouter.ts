@@ -1,4 +1,4 @@
-import authentication from 'controllers/authentication';
+import authentication from '../controllers/authentication';
 import { Router } from 'express';
 
 const authRouter = Router();
