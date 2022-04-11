@@ -113,5 +113,6 @@ export const selectInvitesByUserId = async (projectId: string) => {
   } catch (e) {
     console.error('selectInvitesByUserId', e);
     connection.end();
+    return [];
   }
 };

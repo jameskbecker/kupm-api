@@ -30,5 +30,6 @@ export const selectCommentsByUserId = async (userId: string) => {
   } catch (e) {
     console.error('selectCommentsByUserId', e);
     connection.end();
+    return [];
   }
 };

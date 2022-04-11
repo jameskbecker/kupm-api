@@ -47,13 +47,10 @@ const getUser = async (req: Request, res: Response) => {
 const getNotifications = async (req: Request, res: Response) => {
   let body: any = defaultBody;
   res.set(defaultHeaders);
-
+  console.log('user id', req.params.id);
   try {
     const invites = await selectInvitesByUserId(req.params.id);
     const comments = await selectCommentsByUserId(req.params.id);
-    if (!invites || !comments) {
-      return;
-    }
 
     const formattedInvites = invites.map((i) => {
       const formattedDate = `${getDistance(i.sent_at)} at ${format(
