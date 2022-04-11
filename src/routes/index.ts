@@ -9,5 +9,6 @@ router.use('/projects', projectRouter);
 router.use('/tasks', taskRouter);
 router.use('/invites', inviteRouter);
 router.use('/users', userRouter);
+router.use('/auth', userRouter);
 
 export default router;
