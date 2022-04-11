@@ -3,8 +3,8 @@ import { Router } from 'express';
 
 const authRouter = Router();
 
-authRouter.get('/login', authentication.postLogin);
-authRouter.get('/register', () => {});
-authRouter.get('/reset', () => {});
+authRouter.post('/login', authentication.postLogin);
+authRouter.post('/register', () => {});
+authRouter.post('/reset', () => {});
 
 export default authRouter;
