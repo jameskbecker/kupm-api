@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import authRouter from './authRouter';
 import inviteRouter from './inviteRouter';
 import projectRouter from './projectRouter';
 import taskRouter from './taskRouter';
@@ -9,6 +10,6 @@ router.use('/projects', projectRouter);
 router.use('/tasks', taskRouter);
 router.use('/invites', inviteRouter);
 router.use('/users', userRouter);
-router.use('/auth', userRouter);
+router.use('/auth', authRouter);
 
 export default router;
