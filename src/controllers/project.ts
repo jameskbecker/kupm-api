@@ -28,7 +28,7 @@ const getProject = async (req: Request, res: Response) => {
   let body: any = defaultBody;
   res.set(defaultHeaders);
   try {
-    projects = await selectAllProjects();
+    projects = await selectAllProjects(<string>userId);
 
     body.success = true;
     body.data =
