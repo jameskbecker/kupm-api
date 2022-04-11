@@ -22,6 +22,8 @@ const defaultHeaders = {
 };
 
 const getProject = async (req: Request, res: Response) => {
+  const { userId } = req.query;
+  console.log('getting projects for userid:', userId);
   let projects;
   let body: any = defaultBody;
   res.set(defaultHeaders);
