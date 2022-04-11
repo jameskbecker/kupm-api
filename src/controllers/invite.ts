@@ -18,11 +18,12 @@ const postInvite = async (req: Request, res: Response) => {
   res.set(defaultHeaders);
 
   try {
-    await insertInvite(
-      '6f35f124-46d4-11ec-8b6c-d2f44fac733b',
-      '08a4c7d4-94d4-11ec-8b6c-d2f44fac733b',
-      'ee74e744-9baf-11ec-8b6c-d2f44fac733b'
-    );
+    const dataPacket = await selectUserIdByEmail(req.body.email);
+    const userId = dataPacket ? dataPacket[0].id : null;
+    if (!userId) {
+      console.log('no user id');
+    }
+    await insertInvite(req.body.projectId, req.body.userId, userId);
     res.status(200);
     body.success = true;
     body.data = {};
@@ -40,7 +41,7 @@ const postInviteJoin = async (req: Request, res: Response) => {
   res.set(defaultHeaders);
 
   try {
-    const dataPacket = await selectUserIdByEmail();
+    const dataPacket = await selectUserIdByEmail('fdk');
     const userId = dataPacket ? dataPacket[0].id : null;
     if (!userId) {
       console.log('no user id');
