@@ -18,7 +18,11 @@ const postInvite = async (req: Request, res: Response) => {
   res.set(defaultHeaders);
 
   try {
-    await insertInvite();
+    await insertInvite(
+      '6f35f124-46d4-11ec-8b6c-d2f44fac733b',
+      '08a4c7d4-94d4-11ec-8b6c-d2f44fac733b',
+      'ee74e744-9baf-11ec-8b6c-d2f44fac733b'
+    );
     res.status(200);
     body.success = true;
     body.data = {};
@@ -42,7 +46,7 @@ const postInviteJoin = async (req: Request, res: Response) => {
       console.log('no user id');
     }
     await insertUserProject('f', userId);
-    await acceptInvite();
+    await acceptInvite('24e16be8-a238-11ec-a815-e0077f688b83');
     //await selectInviteByProjectId();
     res.status(200);
     body.success = true;

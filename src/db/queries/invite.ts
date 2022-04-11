@@ -1,7 +1,11 @@
 import { createConnection, FieldPacket, RowDataPacket } from 'mysql2';
 import connectionOptions from '../connection';
 
-export const insertInvite = async () => {
+export const insertInvite = async (
+  projectId: string,
+  senderId: string,
+  receiverId: string
+) => {
   const connection = createConnection(connectionOptions());
   try {
     const statement = `
@@ -19,9 +23,9 @@ export const insertInvite = async () => {
       0,
       current_time(),
       from_unixtime(1649519522),
-      "6f35f124-46d4-11ec-8b6c-d2f44fac733b",
-      "08a4c7d4-94d4-11ec-8b6c-d2f44fac733b",
-      "ee74e744-9baf-11ec-8b6c-d2f44fac733b"
+      "${projectId}",
+      "${senderId}",
+      "${receiverId}"
     )
     `;
     await connection.promise().query(statement);
@@ -32,13 +36,13 @@ export const insertInvite = async () => {
   }
 };
 
-export const acceptInvite = async () => {
+export const acceptInvite = async (inviteId: string) => {
   const connection = createConnection(connectionOptions());
   try {
     const statement = `
     UPDATE Invite
     SET is_accepted = true
-    WHERE id = "24e16be8-a238-11ec-a815-e0077f688b83"
+    WHERE id = "${inviteId}"
     `;
     await connection.promise().query(statement);
     connection.end();
@@ -69,7 +73,7 @@ export const selectInviteByProjectId = async (projectId: string) => {
     INNER JOIN User AS Sender
       ON Invite.sender_id = Sender.id
 
-    WHERE Project.id = "6f35f124-46d4-11ec-8b6c-d2f44fac733b"
+    WHERE Project.id = "${projectId}"
     `;
     const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
       .promise()
