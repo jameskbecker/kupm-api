@@ -22,7 +22,7 @@ const getUser = async (req: Request, res: Response) => {
 
   res.set(defaultHeaders);
   try {
-    const user = <any>await selectUserById(id);
+    const [user] = <any>await selectUserById(id);
     if (!user) {
       res.status(404);
       body.error = 'User not Found.';
