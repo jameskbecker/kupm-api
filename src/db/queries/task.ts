@@ -15,7 +15,7 @@ export const selectAllUserTasks = async (userId: string) => {
     FROM Task
     INNER JOIN Project
       ON Task.project_id = Project.id
-    WHERE user_id = "${userId}"
+    WHERE Project.created_by_user_id = "${userId}"
     ${/*ORDER BY Task.deadline_at DESC*/ ''}
     LIMIT 25
     `;
