@@ -85,7 +85,7 @@ export const updateProject = async (id: string, payload: any) => {
 
 export const insertProject = async (id: string, payload: any) => {
   const connection = createConnection(connectionOptions());
-  const { name, description, priority, createdBy } = payload;
+  const { name, dueAt, description, priority, createdBy } = payload;
   const data = {
     id: `"${id}"`,
     name: `"${name}"`,
@@ -96,6 +96,7 @@ export const insertProject = async (id: string, payload: any) => {
 
     created_at: 'current_time()',
     updated_at: 'current_time()',
+    due_at: `from_unixtime(${dueAt})`,
     created_by_user_id: `"${createdBy}"`,
   };
 
