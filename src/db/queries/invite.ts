@@ -82,7 +82,7 @@ export const selectInviteByProjectId = async (projectId: string) => {
   }
 };
 
-export const selectInvitesByUserId = async (projectId: string) => {
+export const selectInvitesByUserId = async (userId: string) => {
   const connection = createConnection(connectionOptions());
   try {
     const statement = `
@@ -103,7 +103,7 @@ export const selectInvitesByUserId = async (projectId: string) => {
     INNER JOIN User AS Sender
       ON Invite.sender_id = Sender.id
 
-    ${/*WHERE Project.id = "6f35f124-46d4-11ec-8b6c-d2f44fac733b"*/ ''}
+    WHERE Project.id = "${userId}"
     `;
     const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
       .promise()
