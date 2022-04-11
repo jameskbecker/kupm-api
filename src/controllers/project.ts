@@ -41,7 +41,7 @@ const getProject = async (req: Request, res: Response) => {
         createdAt: p.created_at,
         completedAt: p.completed_at,
         memberGroupId: null,
-        owner: `${p.owner_last_name.toUpperCase()}, ${p.owner_first_name}`,
+        owner: '', //`${p.owner_last_name.toUpperCase()}, ${p.owner_first_name}`,
       })) || [];
     res.status(200);
   } catch (e: any) {
