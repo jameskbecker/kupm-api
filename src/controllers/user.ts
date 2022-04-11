@@ -106,7 +106,7 @@ const getTodo = async (req: Request, res: Response) => {
   res.set(defaultHeaders);
 
   try {
-    const upcomingTasks = await selectAllUserTasks('');
+    const upcomingTasks = await selectAllUserTasks(req.params.id);
 
     if (!upcomingTasks) {
       return;

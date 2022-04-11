@@ -1,7 +1,7 @@
 import { createConnection } from 'mysql2';
 import connectionOptions from '../connection';
 
-export const selectAllUserTasks = async (id: string) => {
+export const selectAllUserTasks = async (userId: string) => {
   const connection = createConnection(connectionOptions());
   try {
     const statement = `
@@ -15,7 +15,7 @@ export const selectAllUserTasks = async (id: string) => {
     FROM Task
     INNER JOIN Project
       ON Task.project_id = Project.id
-    ${/*WHERE user_id = "${userId}"*/ ''}
+    WHERE user_id = "${userId}"
     ${/*ORDER BY Task.deadline_at DESC*/ ''}
     LIMIT 25
     `;
