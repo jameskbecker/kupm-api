@@ -142,7 +142,7 @@ export const insertTask = async (payload: any) => {
     VALUES (
       ${values}
     )`;
-
+    console.log(statement);
     const results = await connection.promise().query(statement);
     connection.end();
     return results[0];
