@@ -103,7 +103,7 @@ export const selectInvitesByUserId = async (userId: string) => {
     INNER JOIN User AS Sender
       ON Invite.sender_id = Sender.id
 
-    WHERE Invited.receiver_id = "${userId}"
+    WHERE Invite.receiver_id = "${userId}"
     `;
     const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
       .promise()
