@@ -127,7 +127,7 @@ export const insertTask = async (payload: any) => {
     completed_at: 'NULL',
     created_at: 'current_time()',
     updated_at: 'current_time()',
-    parent_task_id: `"${parentId ? parentId : 'NULL'}"`,
+    parent_task_id: `${parentId ? `"${parentId}"` : 'NULL'}`,
     project_id: `"${projectId}"`,
   };
 
