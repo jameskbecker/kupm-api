@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { selectInvitesByUserId } from '../db/queries/invite';
 import { selectAllUserTasks } from '../db/queries/task';
 import { format, formatDistance } from 'date-fns';
+import { selectUserById } from 'db/queries/user';
 
 const defaultBody = { success: false };
 const defaultHeaders = {
@@ -14,6 +15,29 @@ const getDistance = (ts: string) =>
   formatDistance(new Date(ts), Date.now(), {
     addSuffix: true,
   });
+
+const getUser = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  let body: any = defaultBody;
+
+  res.set(defaultHeaders);
+  try {
+    const user = await selectUserById(id);
+    if (!user) {
+      res.status(404);
+      body.error = 'User not Found.';
+    } else {
+      body.success = true;
+      body.data = user;
+      res.status(200);
+    }
+  } catch (e: any) {
+    res.status(501);
+    body.error = e?.message;
+  }
+
+  res.json(body);
+};
 
 const getNotifications = async (req: Request, res: Response) => {
   let body: any = defaultBody;
@@ -111,5 +135,5 @@ const getTodo = async (req: Request, res: Response) => {
   res.json(body);
 };
 
-const userController = { getNotifications, getTodo };
+const userController = { getUser, getNotifications, getTodo };
 export default userController;
