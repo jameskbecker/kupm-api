@@ -1,19 +1,21 @@
+import { format } from 'date-fns';
+import { Request, Response } from 'express';
+import { selectInviteByProjectId } from '../db/queries/invite';
 import {
-  updateProject,
+  deleteProjectById,
   insertProject,
-  selectAllProjects,
   selectProjectById,
   selectProjectNameById,
-  deleteProjectById,
+  updateProject,
 } from '../db/queries/project';
 import {
   deleteTaskByProjectId,
   selectTasksByProjectId,
 } from '../db/queries/task';
-import { selectUserProjects } from '../db/queries/userProject';
-import { Request, Response } from 'express';
-import { selectInviteByProjectId } from '../db/queries/invite';
-import { format } from 'date-fns';
+import {
+  selectUserProjectMembers,
+  selectUserProjects,
+} from '../db/queries/userProject';
 
 const defaultBody = { success: false };
 const defaultHeaders = {
@@ -23,16 +25,16 @@ const defaultHeaders = {
 
 const getProject = async (req: Request, res: Response) => {
   const { userId } = req.query;
-  console.log('getting projects for userid:', userId);
-  let projects;
+
+  let userProjects;
   let body: any = defaultBody;
   res.set(defaultHeaders);
   try {
-    projects = await selectAllProjects(<string>userId);
+    userProjects = await selectUserProjects(<string>userId);
 
     body.success = true;
     body.data =
-      projects?.map((p: any) => ({
+      userProjects?.map((p: any) => ({
         id: p.id,
         name: p.name,
         description: p.description,
@@ -41,14 +43,13 @@ const getProject = async (req: Request, res: Response) => {
         createdAt: p.created_at,
         completedAt: p.completed_at,
         dueAt: p.due_at,
-        memberGroupId: null,
         owner: '', //`${p.owner_last_name.toUpperCase()}, ${p.owner_first_name}`,
       })) || [];
     res.status(200);
   } catch (e: any) {
     console.log(e);
     body.error = e?.message;
-    res.status(503);
+    res.status(501);
   }
 
   res.json(body);
@@ -66,7 +67,7 @@ const postProject = async (req: Request, res: Response) => {
     body.data = {};
   } catch (e: any) {
     console.log(e);
-    res.status(500);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -89,7 +90,7 @@ const getProjectById = async (req: Request, res: Response) => {
       res.status(200);
     }
   } catch (e: any) {
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -112,7 +113,7 @@ const updateProjectById = async (req: Request, res: Response) => {
     }
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -136,7 +137,7 @@ const deleteProject = async (req: Request, res: Response) => {
     }
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -176,7 +177,7 @@ const getProjectTasks = async (req: Request, res: Response) => {
       res.status(200);
     }
   } catch (e: any) {
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -188,7 +189,9 @@ const getProjectMembers = async (req: Request, res: Response) => {
   let body: any = defaultBody;
   res.set(defaultHeaders);
   try {
-    members = await selectUserProjects();
+    members = await selectUserProjectMembers(
+      '6f35f124-46d4-11ec-8b6c-d2f44fac733b'
+    );
 
     body.success = true;
     console.log(members);
@@ -208,7 +211,7 @@ const getProjectMembers = async (req: Request, res: Response) => {
   } catch (e: any) {
     console.log(e);
     body.error = e?.message;
-    res.status(503);
+    res.status(501);
   }
 
   res.json(body);
@@ -239,7 +242,7 @@ const getProjectActivity = async (req: Request, res: Response) => {
   } catch (e: any) {
     console.log(e);
     body.error = e?.message;
-    res.status(503);
+    res.status(501);
   }
 
   res.json(body);

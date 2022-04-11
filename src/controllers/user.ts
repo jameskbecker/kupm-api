@@ -68,7 +68,7 @@ const getNotifications = async (req: Request, res: Response) => {
     );
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -104,7 +104,7 @@ const getTodo = async (req: Request, res: Response) => {
     );
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 

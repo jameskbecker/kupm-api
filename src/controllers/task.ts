@@ -25,7 +25,7 @@ const postTask = async (req: Request, res: Response) => {
     body.data = {};
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -48,7 +48,7 @@ const updateTaskById = async (req: Request, res: Response) => {
     }
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -71,7 +71,7 @@ const deleteTask = async (req: Request, res: Response) => {
     }
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -106,7 +106,7 @@ const getSubtasks = async (req: Request, res: Response) => {
   } catch (e: any) {
     console.log(e);
     body.error = e?.message;
-    res.status(503);
+    res.status(501);
   }
 
   res.json(body);

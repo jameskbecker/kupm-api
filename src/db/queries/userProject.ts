@@ -6,7 +6,44 @@ import {
 } from 'mysql2';
 import connectionOptions from '../connection';
 
-export const selectUserProjects = async () => {
+export const selectUserProjects = async (userId: string) => {
+  const connection = createConnection(connectionOptions());
+  try {
+    const statement = `
+      SELECT 
+        Project.id, 
+        Project.name, 
+        Project.description, 
+        Project.is_complete, 
+        Project.priority, 
+        Project.created_at
+        Project.due_at
+      
+      FROM UserProject
+
+      INNER JOIN Project
+        ON UserProject.project_id = Project.id
+
+      INNER JOIN User AS Owner
+        ON Project.created_by_user_id = Owner.id
+
+      WHERE user_id = "${userId}"
+  
+      ORDER BY Project.created_at DESC
+    `;
+
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
+      .promise()
+      .query(statement);
+    connection.end();
+    return rows;
+  } catch (e) {
+    console.error('selectUserProjects', e);
+    connection.end();
+  }
+};
+
+export const selectUserProjectMembers = async (projectId: string) => {
   const connection = createConnection(connectionOptions());
   try {
     const statement = `
@@ -24,7 +61,7 @@ export const selectUserProjects = async () => {
       INNER JOIN User
         ON User.id = UserProject.user_id
       WHERE 
-        project_id = "6f35f124-46d4-11ec-8b6c-d2f44fac733b"
+        project_id = "${projectId}"
     `;
     const rows: [RowDataPacket[], FieldPacket[]] = await connection
       .promise()
@@ -32,7 +69,7 @@ export const selectUserProjects = async () => {
     connection.end();
     return <any>rows[0];
   } catch (e) {
-    console.error('selectUserProjects', e);
+    console.error('selectUserProjectMembers', e);
     connection.end();
   }
 };

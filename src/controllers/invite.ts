@@ -24,7 +24,7 @@ const postInvite = async (req: Request, res: Response) => {
     body.data = {};
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 
@@ -52,7 +52,7 @@ const postInviteJoin = async (req: Request, res: Response) => {
     };
   } catch (e: any) {
     console.log(e);
-    res.status(503);
+    res.status(501);
     body.error = e?.message;
   }
 

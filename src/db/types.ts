@@ -1,11 +1,12 @@
 export type ProjectEntry = {
   id: string;
-  name: string;
-  description: string;
-  is_complete: boolean;
-  priority: number;
+  name?: string;
+  description?: string;
   created_at: number;
-  completed_at: number | null;
+  due_at?: string;
+  completed_at?: string;
+  is_complete?: number;
+  priority?: number;
 };
 
 export type ProjectTable = ProjectEntry[];

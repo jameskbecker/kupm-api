@@ -2,58 +2,6 @@ import { createConnection } from 'mysql2';
 import connectionOptions from '../connection';
 import { ProjectTable } from '../types';
 
-export const selectAllProjects = async (userId: string) => {
-  const connection = createConnection(connectionOptions());
-  try {
-    const statement = `
-    SELECT 
-      Project.id, 
-      Project.name, 
-      Project.description, 
-      Project.is_complete, 
-      Project.priority, 
-      Project.created_at
-      Project.due_at
-      
-      FROM UserProject
-
-      INNER JOIN Project
-        ON UserProject.project_id = Project.id
-
-      INNER JOIN User AS Owner
-        ON Project.created_by_user_id = Owner.id
-
-      WHERE user_id = "${userId}"
-  
-      ORDER BY Project.created_at DESC
-
-    `;
-
-    // const statement = `
-    // SELECT
-    //   Project.id,
-    //   Project.name,
-    //   Project.description,
-    //   Project.is_complete,
-    //   Project.priority,
-    //   Project.created_at,
-
-    //   Owner.first_name AS owner_first_name,
-    //   Owner.last_name AS owner_last_name
-
-    // FROM Project
-
-    // `;
-    console.log(statement);
-    const [rows]: unknown[] = await connection.promise().query(statement);
-    connection.end();
-    return <ProjectTable>rows;
-  } catch (e) {
-    console.error('selectAllProjects', e);
-    connection.end();
-  }
-};
-
 export const selectProjectNameById = async (id: string) => {
   const connection = createConnection(connectionOptions());
   try {
