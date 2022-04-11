@@ -22,13 +22,18 @@ const getUser = async (req: Request, res: Response) => {
 
   res.set(defaultHeaders);
   try {
-    const user = await selectUserById(id);
+    const user = <any>await selectUserById(id);
     if (!user) {
       res.status(404);
       body.error = 'User not Found.';
     } else {
       body.success = true;
-      body.data = user;
+      body.data = {
+        id: user.id,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email,
+      };
       res.status(200);
     }
   } catch (e: any) {
