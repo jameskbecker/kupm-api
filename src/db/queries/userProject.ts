@@ -18,6 +18,9 @@ export const selectUserProjects = async (userId: string) => {
         Project.priority, 
         Project.created_at,
         Project.due_at
+        
+        Owner.first_name AS owner_first_name
+        Owner.last_name AS owner_last_name
       
       FROM UserProject
 
