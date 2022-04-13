@@ -11,7 +11,7 @@ export const selectAllUserTasks = async (userId: string) => {
       Task.description,
       Task.created_at,
       Project.id AS project_id,
-      Project.name AS project_name
+      Project.name AS project_name,
       Project.due_at as project_due_at
     FROM Task
     INNER JOIN Project
