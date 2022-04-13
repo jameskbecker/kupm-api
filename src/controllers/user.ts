@@ -117,9 +117,8 @@ const getTodo = async (req: Request, res: Response) => {
       projectId: t.project_id,
       type: 'task',
       createdAt: t.created_at,
-      dueAt: t.project_due_at,
       heading: t.name,
-      subHeading: format(new Date(t.created_at), "dd/MM/y 'at' hh:mm aa"),
+      subHeading: format(new Date(t.project_due_at), "dd/MM/y 'at' hh:mm aa"),
       body: t.description,
     }));
 
