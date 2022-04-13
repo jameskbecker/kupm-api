@@ -16,7 +16,8 @@ export const selectAllUserTasks = async (userId: string) => {
     INNER JOIN Project
       ON Task.project_id = Project.id
     WHERE Project.created_by_user_id = "${userId}"
-    ${/*ORDER BY Task.deadline_at DESC*/ ''}
+      AND Task.parent_task_id IS NULL
+    ORDER BY Task.deadline_at ASC
     LIMIT 25
     `;
     const [tasks]: any = await connection.promise().query(statement);
