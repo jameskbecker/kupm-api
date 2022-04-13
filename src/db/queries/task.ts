@@ -73,6 +73,8 @@ export const selectTasksByProjectId = async (id: string) => {
 
     WHERE project_id = "${id}" 
       AND Task.parent_task_id IS NULL
+
+    ORDER BY Task.created_at ASC
     `;
     const [tasks]: any = await connection.promise().query(statement);
     connection.end();
