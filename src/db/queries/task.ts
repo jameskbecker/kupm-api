@@ -12,12 +12,13 @@ export const selectAllUserTasks = async (userId: string) => {
       Task.created_at,
       Project.id AS project_id,
       Project.name AS project_name
+      Project.due_at as project_due_at
     FROM Task
     INNER JOIN Project
       ON Task.project_id = Project.id
     WHERE Project.created_by_user_id = "${userId}"
       AND Task.parent_task_id IS NULL
-    ORDER BY Task.due_at ASC
+    ORDER BY Project.due_at ASC
     LIMIT 25
     `;
     const [tasks]: any = await connection.promise().query(statement);
