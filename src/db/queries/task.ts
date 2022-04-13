@@ -71,7 +71,7 @@ export const selectTasksByProjectId = async (id: string) => {
     INNER JOIN Project 
       ON Task.project_id = Project.id
 
-    WHERE project_id = "${id}"
+    WHERE project_id = "${id}" AND Task.parent_task_id = NULL
     `;
     const [tasks]: any = await connection.promise().query(statement);
     connection.end();
@@ -142,7 +142,6 @@ export const insertTask = async (payload: any) => {
     VALUES (
       ${values}
     )
-    WHERE Task.parent_task_id = NULL
     `;
     console.log(statement);
     const results = await connection.promise().query(statement);
