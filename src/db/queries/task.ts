@@ -141,7 +141,9 @@ export const insertTask = async (payload: any) => {
     ) 
     VALUES (
       ${values}
-    )`;
+    )
+    WHERE Task.parent_task_id = NULL
+    `;
     console.log(statement);
     const results = await connection.promise().query(statement);
     connection.end();
