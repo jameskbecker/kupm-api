@@ -17,7 +17,7 @@ export const selectAllUserTasks = async (userId: string) => {
       ON Task.project_id = Project.id
     WHERE Project.created_by_user_id = "${userId}"
       AND Task.parent_task_id IS NULL
-    ORDER BY Task.deadline_at ASC
+    ORDER BY Task.due_at ASC
     LIMIT 25
     `;
     const [tasks]: any = await connection.promise().query(statement);
