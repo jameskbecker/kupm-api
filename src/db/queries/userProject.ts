@@ -117,8 +117,9 @@ export const deleteUserProjectByProjectId = async (id: string) => {
     const statement = `
     DELETE FROM UserProject WHERE UserProject.project_id = "${id}"
     `;
-    await connection.promise().query(statement);
+    const value = await connection.promise().query(statement);
     connection.end();
+    return value;
   } catch (e) {
     console.error('deleteUserProjectByProjectId', e);
     connection.end();

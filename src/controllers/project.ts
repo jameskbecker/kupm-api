@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
 import { selectInviteByProjectId } from '../db/queries/invite';
 import {
-  deleteProjectById,
   insertProject,
   selectProjectById,
   selectProjectNameById,
@@ -132,15 +131,16 @@ const deleteProject = async (req: Request, res: Response) => {
 
   try {
     await deleteTaskByProjectId(id);
-    await deleteUserProjectByProjectId(id);
-    const project = await deleteProjectById(id);
-    if (!project) {
-      res.status(404);
-      body.error = 'Project not Found.';
-    } else {
-      res.status(200);
-      body.data = {};
-    }
+    console.log(await deleteUserProjectByProjectId(id));
+    //const project = await deleteProjectById(id);
+    // if (!project) {
+    //   res.status(404);
+    //   body.error = 'Project not Found.';
+    // } else {
+    //   res.status(200);
+    //   body.data = {};
+    // }
+    res.status(200);
   } catch (e: any) {
     console.log(e);
     res.status(501);
