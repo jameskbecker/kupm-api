@@ -131,7 +131,7 @@ const deleteProject = async (req: Request, res: Response) => {
 
   try {
     await deleteTaskByProjectId(id);
-    console.log(await deleteUserProjectByProjectId(id));
+    await deleteUserProjectByProjectId(id);
     //const project = await deleteProjectById(id);
     // if (!project) {
     //   res.status(404);
