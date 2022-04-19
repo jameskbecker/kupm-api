@@ -110,3 +110,17 @@ export const insertUserProject = async (projectId: string, userId: string) => {
     connection.end();
   }
 };
+
+export const deleteUserProjectByProjectId = async (id: string) => {
+  const connection = createConnection(connectionOptions());
+  try {
+    const statement = `
+    DELETE FROM UserProject WHERE UserProject.project_id = "${id}"
+    `;
+    await connection.promise().query(statement);
+    connection.end();
+  } catch (e) {
+    console.error('deleteUserProjectByProjectId', e);
+    connection.end();
+  }
+};

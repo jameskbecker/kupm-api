@@ -14,6 +14,7 @@ import {
   selectTasksByProjectId,
 } from '../db/queries/task';
 import {
+  deleteUserProjectByProjectId,
   insertUserProject,
   selectUserProjectMembers,
   selectUserProjects,
@@ -131,6 +132,7 @@ const deleteProject = async (req: Request, res: Response) => {
 
   try {
     await deleteTaskByProjectId(id);
+    await deleteUserProjectByProjectId(id);
     const project = await deleteProjectById(id);
     if (!project) {
       res.status(404);
