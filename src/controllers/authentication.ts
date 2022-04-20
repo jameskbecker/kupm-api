@@ -39,11 +39,13 @@ const postLogin = async (req: Request, res: Response) => {
     }
 
     res.status(200);
-    res.setHeader(
-      'set-cookie',
-      `kupm_user_id=${id}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/;`
-    );
-    res.json({ success: true });
+    // res.setHeader(
+    //   'set-cookie',
+    //   `kupm_user_id=${id}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/;`
+    // );
+
+    res.setHeader('location', `/;`);
+    res.json({ success: true, data: { userId: id } });
   } catch (e) {
     console.log(e);
     res.status(501);
