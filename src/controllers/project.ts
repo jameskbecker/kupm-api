@@ -132,14 +132,6 @@ const deleteProject = async (req: Request, res: Response) => {
   try {
     await deleteTaskByProjectId(id);
     await deleteUserProjectByProjectId(id);
-    //const project = await deleteProjectById(id);
-    // if (!project) {
-    //   res.status(404);
-    //   body.error = 'Project not Found.';
-    // } else {
-    //   res.status(200);
-    //   body.data = {};
-    // }
     res.status(200);
   } catch (e: any) {
     console.log(e);

@@ -1,7 +1,7 @@
 import mysql from 'mysql2';
 
 const connectionOptions = () =>
-  !process.env.PORT
+  false //!process.env.PORT
     ? {
         host: 'localhost',
         user: 'root',

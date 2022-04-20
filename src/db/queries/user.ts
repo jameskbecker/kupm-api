@@ -1,3 +1,4 @@
+import { RegisterPayload } from 'controllers/authentication';
 import { createConnection, FieldPacket, RowDataPacket } from 'mysql2';
 import connectionOptions from '../connection';
 
@@ -40,5 +41,35 @@ export const selectUserById = async (id: string) => {
   } catch (e) {
     console.error('selectUserById', e);
     connection.end();
+  }
+};
+
+export const insertUser = async (data: RegisterPayload) => {
+  const connection = createConnection(connectionOptions());
+  try {
+    const statement = `
+      INSERT INTO User (
+        id,
+        first_name,
+        last_name,
+        email,
+        password_hash,
+        created_at
+      ) 
+      VALUES (
+        uuid(),
+        "${data.firstName}",
+        "${data.lastName}",
+        "${data.email}",
+        "SHA1(${data.password})",
+        current_time()
+      )
+      `;
+    const result = await connection.promise().query(statement);
+    connection.end();
+    return result;
+  } catch (e) {
+    connection.end();
+    throw e;
   }
 };

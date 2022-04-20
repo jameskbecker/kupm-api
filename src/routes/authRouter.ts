@@ -4,7 +4,7 @@ import { Router } from 'express';
 const authRouter = Router();
 
 authRouter.post('/login', authentication.postLogin);
-authRouter.post('/register', () => {});
+authRouter.post('/register', authentication.postRegister);
 authRouter.post('/reset', () => {});
 
 export default authRouter;
