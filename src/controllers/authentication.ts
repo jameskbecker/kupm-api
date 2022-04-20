@@ -24,7 +24,7 @@ const postLogin = async (req: Request, res: Response) => {
     }
 
     const { id, password: oldPassword } = results[0];
-    if (!id || oldPassword) {
+    if (!id || !oldPassword) {
       res.status(501);
       res.json({ success: false, error: 'An Unexpected Error Occured.' });
       return;
