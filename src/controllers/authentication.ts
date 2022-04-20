@@ -38,7 +38,7 @@ const postLogin = async (req: Request, res: Response) => {
       return;
     }
 
-    res.status(200);
+    res.status(302);
     // res.setHeader(
     //   'set-cookie',
     //   `kupm_user_id=${id}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/;`
