@@ -19,10 +19,14 @@ const postLogin = async (req: Request, res: Response) => {
     const results = await selectPasswordByEmail(email);
     if (!(results instanceof Array)) return;
 
+    if (!results[0]) {
+      res.json({ success: false, error: 'Incorrect Email' });
+    }
+
     const isValid = await bcrypt.compare(password, results[0].password);
     if (!isValid) {
       res.status(401);
-      res.json({ success: false, error: 'Incorrect email or password.' });
+      res.json({ success: false, error: 'Incorrect Password' });
       return;
     }
 
