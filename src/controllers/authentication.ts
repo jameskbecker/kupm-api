@@ -11,7 +11,7 @@ const postLogin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400);
-    res.json({ error: 'check request body' });
+    res.json({ success: false, error: 'check request body' });
     return;
   }
 
