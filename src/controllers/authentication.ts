@@ -23,7 +23,14 @@ const postLogin = async (req: Request, res: Response) => {
       res.json({ success: false, error: 'Incorrect Email' });
     }
 
-    const isValid = await bcrypt.compare(password, results[0].password);
+    const { id, password: oldPassword } = results[0];
+    if (!id || oldPassword) {
+      res.status(501);
+      res.json({ success: false, error: 'An Unexpected Error Occured.' });
+      return;
+    }
+
+    const isValid = await bcrypt.compare(password, oldPassword);
     if (!isValid) {
       res.status(401);
       res.json({ success: false, error: 'Incorrect Password' });
@@ -31,6 +38,10 @@ const postLogin = async (req: Request, res: Response) => {
     }
 
     res.status(200);
+    res.setHeader(
+      'set-cookie',
+      `kupm_user_id=${id}; expires=Fri, 31 Dec 9999 23:59:59 GMT;`
+    );
     res.json({ success: true });
   } catch (e) {
     console.log(e);
