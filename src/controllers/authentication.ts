@@ -1,9 +1,38 @@
-import { insertUser } from '../db/queries/user';
 import { Request, Response } from 'express';
+import { insertUser, selectPasswordByEmail } from '../db/queries/user';
+import bcrypt from 'bcrypt';
 
-const postLogin = (req: Request, res: Response) => {
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+const postLogin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  console.log(email, password);
+  if (!email || !password) {
+    res.status(400);
+    res.json({ error: 'check request body' });
+    return;
+  }
+
+  try {
+    const results = await selectPasswordByEmail(email);
+    if (!(results instanceof Array)) return;
+
+    const isValid = await bcrypt.compare(password, results[0].password);
+    if (!isValid) {
+      res.status(401);
+      res.json({ success: false, error: 'Incorrect email or password.' });
+      return;
+    }
+
+    res.status(200);
+    res.json({ success: true });
+  } catch (e) {
+    console.log(e);
+    res.status(501);
+    res.json({ success: false });
+  }
 };
 
 export type RegisterPayload = {
@@ -17,7 +46,8 @@ const postRegister = async (req: Request, res: Response) => {
   const body: RegisterPayload = req.body;
 
   try {
-    const result = await insertUser(body);
+    const hash = await bcrypt.hash(body.password, 10);
+    const result = await insertUser({ ...body, password: hash });
     console.log(result);
     res.status(200);
     res.json(result);

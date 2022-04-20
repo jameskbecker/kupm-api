@@ -61,7 +61,7 @@ export const insertUser = async (data: RegisterPayload) => {
         "${data.firstName}",
         "${data.lastName}",
         "${data.email}",
-        "SHA1(${data.password})",
+        "${data.password}",
         current_time()
       )
       `;
@@ -71,5 +71,23 @@ export const insertUser = async (data: RegisterPayload) => {
   } catch (e) {
     connection.end();
     throw e;
+  }
+};
+
+export const selectPasswordByEmail = async (email: string) => {
+  const connection = createConnection(connectionOptions());
+  try {
+    const statement = `
+      SELECT password_hash AS password FROM User
+      WHERE email = "${email}"
+    `;
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
+      .promise()
+      .query(statement);
+    connection.end();
+    return rows;
+  } catch (e) {
+    console.error('selectPasswordById', e);
+    connection.end();
   }
 };
