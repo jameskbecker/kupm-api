@@ -44,7 +44,7 @@ const postLogin = async (req: Request, res: Response) => {
     //   `kupm_user_id=${id}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/;`
     // );
 
-    res.setHeader('location', `/;`);
+    res.setHeader('location', '/');
     res.json({ success: true, data: { userId: id } });
   } catch (e) {
     console.log(e);
