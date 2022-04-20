@@ -8,6 +8,7 @@ export type LoginPayload = {
 };
 
 const postLogin = async (req: Request, res: Response) => {
+  console.log(req);
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400);
@@ -40,7 +41,7 @@ const postLogin = async (req: Request, res: Response) => {
     res.status(200);
     res.setHeader(
       'set-cookie',
-      `kupm_user_id=${id}; expires=Fri, 31 Dec 9999 23:59:59 GMT;`
+      `kupm_user_id=${id}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/;`
     );
     res.json({ success: true });
   } catch (e) {
