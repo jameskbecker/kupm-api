@@ -78,7 +78,8 @@ export const selectPasswordByEmail = async (email: string) => {
   const connection = createConnection(connectionOptions());
   try {
     const statement = `
-      SELECT password_hash AS password FROM User
+      SELECT id, password_hash AS password 
+      FROM User
       WHERE email = "${email}"
     `;
     const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
