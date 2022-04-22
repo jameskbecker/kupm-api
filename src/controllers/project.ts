@@ -69,7 +69,18 @@ const postProject = async (req: Request, res: Response) => {
 
     res.status(200);
     body.success = true;
-    body.data = results;
+    body.data =
+      results?.map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        isComplete: !!p.is_complete,
+        priority: p.priority,
+        createdAt: p.created_at,
+        completedAt: p.completed_at,
+        dueAt: format(new Date(p.due_at), "yyyy-MM-dd'T'HH:mm"),
+        owner: `${p.owner_last_name.toUpperCase()}, ${p.owner_first_name}`,
+      })) || [];
   } catch (e: any) {
     console.log(e);
     res.status(501);
