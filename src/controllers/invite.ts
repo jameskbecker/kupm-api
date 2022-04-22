@@ -14,7 +14,7 @@ const defaultHeaders = {
 };
 
 const postInvite = async (req: Request, res: Response) => {
-  let body: any = defaultBody;
+  let body: any = { ...defaultBody };
   res.set(defaultHeaders);
 
   try {
@@ -37,7 +37,7 @@ const postInvite = async (req: Request, res: Response) => {
 };
 
 const postInviteJoin = async (req: Request, res: Response) => {
-  let body: any = defaultBody;
+  let body: any = { ...defaultBody };
   res.set(defaultHeaders);
 
   try {

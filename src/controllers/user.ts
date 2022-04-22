@@ -18,7 +18,7 @@ const getDistance = (ts: string) =>
 
 const getUser = async (req: Request, res: Response) => {
   const id = req.params.id;
-  let body: any = defaultBody;
+  let body: any = { ...defaultBody };
 
   res.set(defaultHeaders);
   try {
@@ -45,7 +45,7 @@ const getUser = async (req: Request, res: Response) => {
 };
 
 const getNotifications = async (req: Request, res: Response) => {
-  let body: any = defaultBody;
+  let body: any = { ...defaultBody };
   res.set(defaultHeaders);
   console.log('user id', req.params.id);
   try {
@@ -102,7 +102,7 @@ const getNotifications = async (req: Request, res: Response) => {
 };
 
 const getTodo = async (req: Request, res: Response) => {
-  let body: any = defaultBody;
+  let body: any = { ...defaultBody };
   res.set(defaultHeaders);
 
   try {
