@@ -6,7 +6,10 @@ import {
 } from 'mysql2';
 import connectionOptions from '../connection';
 
-export const selectUserProjects = async (userId: string) => {
+export const selectUserProjects = async (
+  userId: string,
+  projectId?: string
+) => {
   const connection = createConnection(connectionOptions());
   try {
     const statement = `
@@ -31,6 +34,12 @@ export const selectUserProjects = async (userId: string) => {
         ON Project.created_by_user_id = Owner.id
 
       WHERE user_id = "${userId}"
+      ${
+        projectId
+          ? `
+        AND UserProject.project_id = "${projectId}"`
+          : ''
+      }
   
       ORDER BY Project.created_at DESC
     `;

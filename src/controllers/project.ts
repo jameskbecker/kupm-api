@@ -65,10 +65,11 @@ const postProject = async (req: Request, res: Response) => {
     const projectId = uuid();
     await insertProject(projectId, req.body);
     await insertUserProject(projectId, req.body.createdBy);
+    const results = await selectUserProjects(req.body.createdBy, projectId);
 
     res.status(200);
     body.success = true;
-    body.data = {};
+    body.data = results;
   } catch (e: any) {
     console.log(e);
     res.status(501);
