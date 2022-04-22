@@ -128,7 +128,6 @@ const deleteProject = async (req: Request, res: Response) => {
   const id = req.params.id;
   let body: any = defaultBody;
   res.set(defaultHeaders);
-
   try {
     await deleteTaskByProjectId(id);
     await deleteUserProjectByProjectId(id);

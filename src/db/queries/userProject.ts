@@ -34,7 +34,6 @@ export const selectUserProjects = async (userId: string) => {
   
       ORDER BY Project.created_at DESC
     `;
-    console.log(statement);
     const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
       .promise()
       .query(statement);
