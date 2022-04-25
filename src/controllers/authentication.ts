@@ -21,7 +21,9 @@ const postLogin = async (req: Request, res: Response) => {
     if (!(results instanceof Array)) return;
 
     if (!results[0]) {
+      res.status(404);
       res.json({ success: false, error: 'Incorrect Email' });
+      return;
     }
 
     const { id, password: oldPassword } = results[0];
@@ -38,13 +40,7 @@ const postLogin = async (req: Request, res: Response) => {
       return;
     }
 
-    // res.setHeader(
-    //   'set-cookie',
-    //   `kupm_user_id=${id}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/;`
-    // );
-
-    //res.setHeader('location', '/projects');
-    res.redirect('http://localhost:3000/');
+    //res.redirect('http://localhost:3000/');
     res.json({ success: true, data: { userId: id } });
   } catch (e) {
     console.log(e);
@@ -65,10 +61,12 @@ const postRegister = async (req: Request, res: Response) => {
 
   try {
     const hash = await bcrypt.hash(body.password, 10);
-    const result = await insertUser({ ...body, password: hash });
-    console.log(result);
+    const result: any = await insertUser({ ...body, password: hash });
+    if (result[0]?.affectedRows && result[0].affectedRows !== 1) {
+      res.status(501);
+    }
     res.status(200);
-    res.json(result);
+    res.json({ success: true });
   } catch (e: any) {
     if (!e || !e.code) {
       res.status(501);
