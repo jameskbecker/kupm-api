@@ -6,10 +6,6 @@ import { format, formatDistance } from 'date-fns';
 import { selectUserById } from '../db/queries/user';
 
 const defaultBody = { success: false };
-const defaultHeaders = {
-  'Content-Type': 'application/json',
-  // 'Access-Control-Allow-Origin': 'http://localhost:3000',
-};
 
 const getDistance = (ts: string) =>
   formatDistance(new Date(ts), Date.now(), {
@@ -20,7 +16,6 @@ const getUser = async (req: Request, res: Response) => {
   const id = req.params.id;
   let body: any = { ...defaultBody };
 
-  res.set(defaultHeaders);
   try {
     const [user] = <any>await selectUserById(id);
     if (!user) {
@@ -46,8 +41,7 @@ const getUser = async (req: Request, res: Response) => {
 
 const getNotifications = async (req: Request, res: Response) => {
   let body: any = { ...defaultBody };
-  res.set(defaultHeaders);
-  console.log('user id', req.params.id);
+
   try {
     const invites = await selectInvitesByUserId(req.params.id);
     const comments = await selectCommentsByUserId(req.params.id);
@@ -103,7 +97,6 @@ const getNotifications = async (req: Request, res: Response) => {
 
 const getTodo = async (req: Request, res: Response) => {
   let body: any = { ...defaultBody };
-  res.set(defaultHeaders);
 
   try {
     const upcomingTasks = await selectAllUserTasks(req.params.id);

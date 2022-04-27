@@ -8,14 +8,9 @@ import {
 import { Request, Response } from 'express';
 
 const defaultBody = { success: false };
-const defaultHeaders = {
-  'Content-Type': 'application/json',
-  // 'Access-Control-Allow-Origin': 'http://localhost:3000',
-};
 
 const postTask = async (req: Request, res: Response) => {
   let body: any = { ...defaultBody };
-  res.set(defaultHeaders);
 
   try {
     await insertTask(req.body);
@@ -35,7 +30,6 @@ const postTask = async (req: Request, res: Response) => {
 const updateTaskById = async (req: Request, res: Response) => {
   const id = req.params.id;
   let body: any = { ...defaultBody };
-  res.set(defaultHeaders);
 
   try {
     const task = await updateTask(id, req.body);
@@ -58,7 +52,6 @@ const updateTaskById = async (req: Request, res: Response) => {
 const deleteTask = async (req: Request, res: Response) => {
   const id = req.params.id;
   let body: any = { ...defaultBody };
-  res.set(defaultHeaders);
 
   try {
     const task = await deleteTaskById(id);
@@ -81,7 +74,6 @@ const deleteTask = async (req: Request, res: Response) => {
 const getSubtasks = async (req: Request, res: Response) => {
   let subtasks;
   let body: any = { ...defaultBody };
-  res.set(defaultHeaders);
   try {
     const parent = await selectParentNameById(req.params.id);
     if (!parent) {
