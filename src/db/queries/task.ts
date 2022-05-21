@@ -1,7 +1,7 @@
 import connection from '../connection';
 
 export const selectAllUserTasks = async (userId: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     SELECT
@@ -20,17 +20,17 @@ export const selectAllUserTasks = async (userId: string) => {
     ORDER BY Project.due_at ASC
     LIMIT 25
     `;
-    const [tasks]: any = await db.query(statement);
-    db.end();
+    const [tasks]: any = await client.query(statement);
+    client.end();
     return tasks;
   } catch (e) {
     console.error('selectAllUserTasks', e);
-    db.end();
+    client.end();
   }
 };
 
 export const selectParentNameById = async (parentId: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     SELECT 
@@ -44,17 +44,17 @@ export const selectParentNameById = async (parentId: string) => {
 
     WHERE ParentTask.id = "${parentId}" 
     `;
-    const [rows]: unknown[] = await db.query(statement);
-    db.end();
+    const [rows]: unknown[] = await client.query(statement);
+    client.end();
     return (<any>rows)[0];
   } catch (e) {
     console.error('selectParentNameById', e);
-    db.end();
+    client.end();
   }
 };
 
 export const selectTasksByProjectId = async (id: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     SELECT
@@ -77,17 +77,17 @@ export const selectTasksByProjectId = async (id: string) => {
 
     ORDER BY Task.created_at ASC
     `;
-    const [tasks]: any = await db.query(statement);
-    db.end();
+    const [tasks]: any = await client.query(statement);
+    client.end();
     return tasks;
   } catch (e) {
     console.error('selectTasksByProjectId', e);
-    db.end();
+    client.end();
   }
 };
 
 export const selectSubTasks = async (id: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     SELECT 
@@ -110,17 +110,17 @@ export const selectSubTasks = async (id: string) => {
     WHERE SubTask.parent_task_id = "${id}"
     `;
 
-    const [tasks]: any = await db.query(statement);
-    db.end();
+    const [tasks]: any = await client.query(statement);
+    client.end();
     return tasks;
   } catch (e) {
     console.error('selectSubTasks', e);
-    db.end();
+    client.end();
   }
 };
 
 export const insertTask = async (payload: any) => {
-  const db = connection();
+  const client = connection();
   const { name, description, priority, projectId, parentId } = payload;
   const data = {
     id: 'uuid()',
@@ -148,47 +148,47 @@ export const insertTask = async (payload: any) => {
     )
     `;
     console.log(statement);
-    const results = await db.query(statement);
-    db.end();
+    const results = await client.query(statement);
+    client.end();
     return results[0];
   } catch (e) {
     console.log(e);
-    db.end();
+    client.end();
   }
 };
 
 export const deleteTaskById = async (id: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     DELETE FROM Task
     WHERE id = "${id}"
     `;
-    const [[task]]: any = await db.query(statement);
-    db.end();
+    const [[task]]: any = await client.query(statement);
+    client.end();
     return task;
   } catch (e) {
     console.error('deleteTaskById', e);
-    db.end();
+    client.end();
   }
 };
 
 export const deleteTaskByProjectId = async (id: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     DELETE FROM TASK WHERE Task.project_id = "${id}"
     `;
-    await db.query(statement);
-    db.end();
+    await client.query(statement);
+    client.end();
   } catch (e) {
     console.error('deleteTaskByProjectId', e);
-    db.end();
+    client.end();
   }
 };
 
 export const updateTask = async (id: string, payload: any) => {
-  const db = connection();
+  const client = connection();
   const values: string[] = [];
   const editableColumns = ['name', 'description', 'is_complete'];
 
@@ -208,11 +208,11 @@ export const updateTask = async (id: string, payload: any) => {
     UPDATE Task SET ${data} 
     WHERE id = "${id}"
     `;
-    const [[task]]: any = await db.query(statement);
-    db.end();
+    const [[task]]: any = await client.query(statement);
+    client.end();
     return task;
   } catch (e) {
     console.error('editTaskById', e);
-    db.end();
+    client.end();
   }
 };

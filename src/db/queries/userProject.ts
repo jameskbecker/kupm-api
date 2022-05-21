@@ -5,7 +5,7 @@ export const selectUserProjects = async (
   userId: string,
   projectId?: string
 ) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
       SELECT 
@@ -39,17 +39,19 @@ export const selectUserProjects = async (
       ORDER BY Project.created_at DESC
     `;
 
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(statement);
-    db.end();
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
+      statement
+    );
+    client.end();
     return rows;
   } catch (e) {
     console.error('selectUserProjects', e);
-    db.end();
+    client.end();
   }
 };
 
 export const selectUserProjectMembers = async (projectId: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
       SELECT 
@@ -68,17 +70,19 @@ export const selectUserProjectMembers = async (projectId: string) => {
       WHERE 
         project_id = "${projectId}"
     `;
-    const rows: [RowDataPacket[], FieldPacket[]] = await db.query(statement);
-    db.end();
+    const rows: [RowDataPacket[], FieldPacket[]] = await client.query(
+      statement
+    );
+    client.end();
     return <any>rows[0];
   } catch (e) {
     console.error('selectUserProjectMembers', e);
-    db.end();
+    client.end();
   }
 };
 
 export const insertUserProject = async (projectId: string, userId: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
       INSERT INTO UserProject (
@@ -100,25 +104,25 @@ export const insertUserProject = async (projectId: string, userId: string) => {
         "${userId}"
       )
       `;
-    const ok: [ResultSetHeader, FieldPacket[]] = await db.query(statement);
-    db.end();
+    const ok: [ResultSetHeader, FieldPacket[]] = await client.query(statement);
+    client.end();
     return null;
   } catch (e) {
     console.error('inserUserProject', e);
-    db.end();
+    client.end();
   }
 };
 
 export const deleteUserProjectByProjectId = async (id: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     DELETE FROM UserProject WHERE UserProject.project_id = "${id}"
     `;
-    await db.query(statement);
-    db.end();
+    await client.query(statement);
+    client.end();
   } catch (e) {
     console.error('deleteUserProjectByProjectId', e);
-    db.end();
+    client.end();
   }
 };

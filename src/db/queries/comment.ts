@@ -2,7 +2,7 @@ import { FieldPacket, RowDataPacket } from 'mysql2';
 import connection from '../connection';
 
 export const selectCommentsByUserId = async (userId: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     SELECT 
@@ -22,12 +22,14 @@ export const selectCommentsByUserId = async (userId: string) => {
         ON Comment.task_id = Task.id
     `;
 
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(statement);
-    db.end();
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
+      statement
+    );
+    client.end();
     return rows;
   } catch (e) {
     console.error('selectCommentsByUserId', e);
-    db.end();
+    client.end();
     return [];
   }
 };

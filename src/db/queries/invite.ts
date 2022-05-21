@@ -6,7 +6,7 @@ export const insertInvite = async (
   senderId: string,
   receiverId: string
 ) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     INSERT INTO Invite (
@@ -28,32 +28,32 @@ export const insertInvite = async (
       "${receiverId}"
     )
     `;
-    await db.query(statement);
-    db.end();
+    await client.query(statement);
+    client.end();
   } catch (e) {
     console.error('insertInvite', e);
-    db.end();
+    client.end();
   }
 };
 
 export const acceptInvite = async (inviteId: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     UPDATE Invite
     SET is_accepted = true
     WHERE id = "${inviteId}"
     `;
-    await db.query(statement);
-    db.end();
+    await client.query(statement);
+    client.end();
   } catch (e) {
     console.error('acceptInvite', e);
-    db.end();
+    client.end();
   }
 };
 
 export const selectInviteByProjectId = async (projectId: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     SELECT 
@@ -75,17 +75,19 @@ export const selectInviteByProjectId = async (projectId: string) => {
 
     WHERE Project.id = "${projectId}"
     `;
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(statement);
-    db.end();
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
+      statement
+    );
+    client.end();
     return rows;
   } catch (e) {
     console.error('selectInviteByProjectId', e);
-    db.end();
+    client.end();
   }
 };
 
 export const selectInvitesByUserId = async (userId: string) => {
-  const db = connection();
+  const client = connection();
   try {
     const statement = `
     SELECT 
@@ -107,12 +109,14 @@ export const selectInvitesByUserId = async (userId: string) => {
 
     WHERE Invite.receiver_id = "${userId}"
     `;
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(statement);
-    db.end();
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
+      statement
+    );
+    client.end();
     return rows;
   } catch (e) {
     console.error('selectInvitesByUserId', e);
-    db.end();
+    client.end();
     return [];
   }
 };
