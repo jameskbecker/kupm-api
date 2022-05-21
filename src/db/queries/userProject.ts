@@ -1,16 +1,11 @@
-import {
-  createConnection,
-  FieldPacket,
-  ResultSetHeader,
-  RowDataPacket,
-} from 'mysql2';
-import connectionOptions from '../connection';
+import { FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
+import connection from '../connection';
 
 export const selectUserProjects = async (
   userId: string,
   projectId?: string
 ) => {
-  const connection = createConnection(connectionOptions());
+  const db = connection();
   try {
     const statement = `
       SELECT 
@@ -43,19 +38,18 @@ export const selectUserProjects = async (
   
       ORDER BY Project.created_at DESC
     `;
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
-      .promise()
-      .query(statement);
-    connection.end();
+
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(statement);
+    db.end();
     return rows;
   } catch (e) {
     console.error('selectUserProjects', e);
-    connection.end();
+    db.end();
   }
 };
 
 export const selectUserProjectMembers = async (projectId: string) => {
-  const connection = createConnection(connectionOptions());
+  const db = connection();
   try {
     const statement = `
       SELECT 
@@ -74,19 +68,17 @@ export const selectUserProjectMembers = async (projectId: string) => {
       WHERE 
         project_id = "${projectId}"
     `;
-    const rows: [RowDataPacket[], FieldPacket[]] = await connection
-      .promise()
-      .query(statement);
-    connection.end();
+    const rows: [RowDataPacket[], FieldPacket[]] = await db.query(statement);
+    db.end();
     return <any>rows[0];
   } catch (e) {
     console.error('selectUserProjectMembers', e);
-    connection.end();
+    db.end();
   }
 };
 
 export const insertUserProject = async (projectId: string, userId: string) => {
-  const connection = createConnection(connectionOptions());
+  const db = connection();
   try {
     const statement = `
       INSERT INTO UserProject (
@@ -108,27 +100,25 @@ export const insertUserProject = async (projectId: string, userId: string) => {
         "${userId}"
       )
       `;
-    const ok: [ResultSetHeader, FieldPacket[]] = await connection
-      .promise()
-      .query(statement);
-    connection.end();
+    const ok: [ResultSetHeader, FieldPacket[]] = await db.query(statement);
+    db.end();
     return null;
   } catch (e) {
     console.error('inserUserProject', e);
-    connection.end();
+    db.end();
   }
 };
 
 export const deleteUserProjectByProjectId = async (id: string) => {
-  const connection = createConnection(connectionOptions());
+  const db = connection();
   try {
     const statement = `
     DELETE FROM UserProject WHERE UserProject.project_id = "${id}"
     `;
-    await connection.promise().query(statement);
-    connection.end();
+    await db.query(statement);
+    db.end();
   } catch (e) {
     console.error('deleteUserProjectByProjectId', e);
-    connection.end();
+    db.end();
   }
 };

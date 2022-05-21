@@ -1,12 +1,12 @@
-import { createConnection, FieldPacket, RowDataPacket } from 'mysql2';
-import connectionOptions from '../connection';
+import { FieldPacket, RowDataPacket } from 'mysql2';
+import connection from '../connection';
 
 export const insertInvite = async (
   projectId: string,
   senderId: string,
   receiverId: string
 ) => {
-  const connection = createConnection(connectionOptions());
+  const db = connection();
   try {
     const statement = `
     INSERT INTO Invite (
@@ -28,32 +28,32 @@ export const insertInvite = async (
       "${receiverId}"
     )
     `;
-    await connection.promise().query(statement);
-    connection.end();
+    await db.query(statement);
+    db.end();
   } catch (e) {
     console.error('insertInvite', e);
-    connection.end();
+    db.end();
   }
 };
 
 export const acceptInvite = async (inviteId: string) => {
-  const connection = createConnection(connectionOptions());
+  const db = connection();
   try {
     const statement = `
     UPDATE Invite
     SET is_accepted = true
     WHERE id = "${inviteId}"
     `;
-    await connection.promise().query(statement);
-    connection.end();
+    await db.query(statement);
+    db.end();
   } catch (e) {
     console.error('acceptInvite', e);
-    connection.end();
+    db.end();
   }
 };
 
 export const selectInviteByProjectId = async (projectId: string) => {
-  const connection = createConnection(connectionOptions());
+  const db = connection();
   try {
     const statement = `
     SELECT 
@@ -75,19 +75,17 @@ export const selectInviteByProjectId = async (projectId: string) => {
 
     WHERE Project.id = "${projectId}"
     `;
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
-      .promise()
-      .query(statement);
-    connection.end();
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(statement);
+    db.end();
     return rows;
   } catch (e) {
     console.error('selectInviteByProjectId', e);
-    connection.end();
+    db.end();
   }
 };
 
 export const selectInvitesByUserId = async (userId: string) => {
-  const connection = createConnection(connectionOptions());
+  const db = connection();
   try {
     const statement = `
     SELECT 
@@ -109,14 +107,12 @@ export const selectInvitesByUserId = async (userId: string) => {
 
     WHERE Invite.receiver_id = "${userId}"
     `;
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
-      .promise()
-      .query(statement);
-    connection.end();
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await db.query(statement);
+    db.end();
     return rows;
   } catch (e) {
     console.error('selectInvitesByUserId', e);
-    connection.end();
+    db.end();
     return [];
   }
 };
