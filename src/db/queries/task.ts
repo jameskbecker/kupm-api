@@ -88,28 +88,27 @@ export const selectTasksByProjectId = async (id: string) => {
 
 export const selectSubTasks = async (id: string) => {
   const client = connection();
+  const statement = `
+  SELECT 
+    SubTask.id,
+    SubTask.name,
+    SubTask.description,
+    SubTask.created_at,
+
+    ParentTask.name AS parent_name,
+    Project.name AS project_name
+
+  FROM Task AS SubTask
+
+  INNER JOIN Task AS ParentTask 
+    ON ParentTask.id = SubTask.parent_task_id
+  
+  INNER JOIN Project
+    ON Project.id = SubTask.project_id
+
+  WHERE SubTask.parent_task_id = "${id}"
+  `;
   try {
-    const statement = `
-    SELECT 
-      SubTask.id,
-	    SubTask.name,
-      SubTask.description,
-      SubTask.created_at,
-
-      ParentTask.name AS parent_name,
-      Project.name AS project_name
-
-    FROM Task AS SubTask
- 
-    INNER JOIN Task AS ParentTask 
-      ON ParentTask.id = SubTask.parent_task_id
-    
-    INNER JOIN Project
-	    ON Project.id = SubTask.project_id
-
-    WHERE SubTask.parent_task_id = "${id}"
-    `;
-
     const [tasks]: any = await client.query(statement);
     client.end();
     return tasks;
@@ -137,16 +136,12 @@ export const insertTask = async (payload: any) => {
 
   const columns = Object.keys(data).join(',');
   const values = Object.values(data).join(',');
+  const statement = `
+  INSERT INTO Task ( ${columns} ) 
+  VALUES ( ${values} )
+  `;
 
   try {
-    const statement = `
-    INSERT INTO Task (
-      ${columns}
-    ) 
-    VALUES (
-      ${values}
-    )
-    `;
     console.log(statement);
     const results = await client.query(statement);
     client.end();
@@ -159,11 +154,11 @@ export const insertTask = async (payload: any) => {
 
 export const deleteTaskById = async (id: string) => {
   const client = connection();
+  const statement = `
+  DELETE FROM Task
+  WHERE id = "${id}"
+  `;
   try {
-    const statement = `
-    DELETE FROM Task
-    WHERE id = "${id}"
-    `;
     const [[task]]: any = await client.query(statement);
     client.end();
     return task;
@@ -175,10 +170,10 @@ export const deleteTaskById = async (id: string) => {
 
 export const deleteTaskByProjectId = async (id: string) => {
   const client = connection();
+  const statement = `
+  DELETE FROM TASK WHERE Task.project_id = "${id}"
+  `;
   try {
-    const statement = `
-    DELETE FROM TASK WHERE Task.project_id = "${id}"
-    `;
     await client.query(statement);
     client.end();
   } catch (e) {
@@ -201,13 +196,13 @@ export const updateTask = async (id: string, payload: any) => {
         }"`
       )
   );
+  const data = values.join(',');
+  const statement = `
+  UPDATE Task SET ${data} 
+  WHERE id = "${id}"
+  `;
 
   try {
-    const data = values.join(',');
-    const statement = `
-    UPDATE Task SET ${data} 
-    WHERE id = "${id}"
-    `;
     const [[task]]: any = await client.query(statement);
     client.end();
     return task;

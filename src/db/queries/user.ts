@@ -4,12 +4,12 @@ import connection from '../connection';
 
 export const selectUserIdByEmail = async (email: string) => {
   const client = connection();
+  const statement = `
+  SELECT User.id
+  FROM User
+  WHERE User.email = "${email}"
+  `;
   try {
-    const statement = `
-      SELECT User.id
-      FROM User
-      WHERE User.email = "${email}"
-    `;
     const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
       statement
     );
@@ -23,16 +23,16 @@ export const selectUserIdByEmail = async (email: string) => {
 
 export const selectUserById = async (id: string) => {
   const client = connection();
+  const statement = `
+  SELECT 
+    User.id,
+    User.first_name,
+    User.last_name,
+    User.email
+  FROM User
+  WHERE User.id = "${id}"
+  `;
   try {
-    const statement = `
-      SELECT 
-        User.id,
-        User.first_name,
-        User.last_name,
-        User.email
-      FROM User
-      WHERE User.id = "${id}"
-    `;
     const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
       statement
     );
@@ -46,25 +46,25 @@ export const selectUserById = async (id: string) => {
 
 export const insertUser = async (data: RegisterPayload) => {
   const client = connection();
+  const statement = `
+  INSERT INTO User (
+    id,
+    first_name,
+    last_name,
+    email,
+    password_hash,
+    created_at
+  ) 
+  VALUES (
+    uuid(),
+    "${data.firstName}",
+    "${data.lastName}",
+    "${data.email}",
+    "${data.password}",
+    current_time()
+  )
+  `;
   try {
-    const statement = `
-      INSERT INTO User (
-        id,
-        first_name,
-        last_name,
-        email,
-        password_hash,
-        created_at
-      ) 
-      VALUES (
-        uuid(),
-        "${data.firstName}",
-        "${data.lastName}",
-        "${data.email}",
-        "${data.password}",
-        current_time()
-      )
-      `;
     const result = await client.query(statement);
     client.end();
     return result;
@@ -76,12 +76,12 @@ export const insertUser = async (data: RegisterPayload) => {
 
 export const selectPasswordByEmail = async (email: string) => {
   const client = connection();
+  const statement = `
+  SELECT id, password_hash AS password 
+  FROM User
+  WHERE email = "${email}"
+  `;
   try {
-    const statement = `
-      SELECT id, password_hash AS password 
-      FROM User
-      WHERE email = "${email}"
-    `;
     const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
       statement
     );

@@ -3,14 +3,14 @@ import { ProjectTable } from '../types';
 
 export const selectProjectNameById = async (id: string) => {
   const client = connection();
+  const statement = `
+  SELECT 
+    name,
+    description 
+  FROM Project
+  WHERE Project.id = "${id}"
+  `;
   try {
-    const statement = `
-    SELECT 
-      name,
-      description 
-    FROM Project
-    WHERE Project.id = "${id}"
-    `;
     const [rows]: unknown[] = await client.query(statement);
     client.end();
     return (<ProjectTable>rows)[0];
@@ -22,15 +22,13 @@ export const selectProjectNameById = async (id: string) => {
 
 export const selectProjectById = async (id: string) => {
   const client = connection();
+  const idValue = id === 'last' ? 'LAST_INSERT_ID()' : `"${id}"`;
+  const statement = `
+  SELECT * 
+  FROM Project 
+  WHERE id = ${idValue}
+  `;
   try {
-    const idValue = id === 'last' ? 'LAST_INSERT_ID()' : `"${id}"`;
-    console.log(idValue);
-    const statement = `
-    SELECT 
-      * 
-    FROM Project 
-    WHERE id = ${idValue}
-    `;
     const [[project]]: any = await client.query(statement);
     client.end();
     return project;
@@ -42,10 +40,10 @@ export const selectProjectById = async (id: string) => {
 
 export const deleteProjectById = async (id: string) => {
   const client = connection();
+  const statement = `  
+  DELETE FROM Project WHERE id = "${id}"
+  `;
   try {
-    const statement = `  
-    DELETE FROM Project WHERE id = "${id}"
-    `;
     const [[project]]: any = await client.query(statement);
     client.end();
     return project;
@@ -69,10 +67,13 @@ export const updateProject = async (id: string, payload: any) => {
         }"`
       )
   );
+  const data = values.join(',');
+  const statement = `
+  UPDATE Project SET ${data}
+  WHERE id = "${id}"
+  `;
 
   try {
-    const data = values.join(',');
-    const statement = `UPDATE Project SET ${data} WHERE id = "${id}"`;
     const [[project]]: any = await client.query(statement);
     client.end();
     return project;
@@ -101,15 +102,11 @@ export const insertProject = async (id: string, payload: any) => {
 
   const columns = Object.keys(data).join(',');
   const values = Object.values(data).join(',');
+  const statement = `
+  INSERT INTO Project ( ${columns} ) 
+  VALUES ( ${values} )`;
 
   try {
-    const statement = `
-    INSERT INTO Project (
-      ${columns}
-    ) 
-    VALUES (
-      ${values}
-    )`;
     const results = await client.query(statement);
     client.end();
     return results[0];
