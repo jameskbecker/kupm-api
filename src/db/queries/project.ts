@@ -1,63 +1,60 @@
-import { createConnection } from 'mysql2';
-import connectionOptions from '../connection';
+import connection from '../connection';
 import { ProjectTable } from '../types';
 
 export const selectProjectNameById = async (id: string) => {
-  const connection = createConnection(connectionOptions());
+  const client = connection();
+  const statement = `
+  SELECT 
+    name,
+    description 
+  FROM Project
+  WHERE Project.id = "${id}"
+  `;
   try {
-    const statement = `
-    SELECT 
-      name,
-      description 
-    FROM Project
-    WHERE Project.id = "${id}"
-    `;
-    const [rows]: unknown[] = await connection.promise().query(statement);
-    connection.end();
+    const [rows]: unknown[] = await client.query(statement);
+    client.end();
     return (<ProjectTable>rows)[0];
   } catch (e) {
     console.error('selectProjectNameById', e);
-    connection.end();
+    client.end();
   }
 };
 
 export const selectProjectById = async (id: string) => {
-  const connection = createConnection(connectionOptions());
+  const client = connection();
+  const idValue = id === 'last' ? 'LAST_INSERT_ID()' : `"${id}"`;
+  const statement = `
+  SELECT * 
+  FROM Project 
+  WHERE id = ${idValue}
+  `;
   try {
-    const idValue = id === 'last' ? 'LAST_INSERT_ID()' : `"${id}"`;
-    console.log(idValue);
-    const statement = `
-    SELECT 
-      * 
-    FROM Project 
-    WHERE id = ${idValue}
-    `;
-    const [[project]]: any = await connection.promise().query(statement);
-    connection.end();
+    const [[project]]: any = await client.query(statement);
+    client.end();
     return project;
   } catch (e) {
     console.error('selectProjectById', e);
-    connection.end();
+    client.end();
   }
 };
 
 export const deleteProjectById = async (id: string) => {
-  const connection = createConnection(connectionOptions());
+  const client = connection();
+  const statement = `  
+  DELETE FROM Project WHERE id = "${id}"
+  `;
   try {
-    const statement = `  
-    DELETE FROM Project WHERE id = "${id}"
-    `;
-    const [[project]]: any = await connection.promise().query(statement);
-    connection.end();
+    const [[project]]: any = await client.query(statement);
+    client.end();
     return project;
   } catch (e) {
     console.error('deleteProjectById', e);
-    connection.end();
+    client.end();
   }
 };
 
 export const updateProject = async (id: string, payload: any) => {
-  const connection = createConnection(connectionOptions());
+  const client = connection();
   const values: string[] = [];
   const editableColumns = ['name', 'description', 'is_complete', 'priority'];
 
@@ -70,21 +67,24 @@ export const updateProject = async (id: string, payload: any) => {
         }"`
       )
   );
+  const data = values.join(',');
+  const statement = `
+  UPDATE Project SET ${data}
+  WHERE id = "${id}"
+  `;
 
   try {
-    const data = values.join(',');
-    const statement = `UPDATE Project SET ${data} WHERE id = "${id}"`;
-    const [[project]]: any = await connection.promise().query(statement);
-    connection.end();
+    const [[project]]: any = await client.query(statement);
+    client.end();
     return project;
   } catch (e) {
     console.error('editProjectById', e);
-    connection.end();
+    client.end();
   }
 };
 
 export const insertProject = async (id: string, payload: any) => {
-  const connection = createConnection(connectionOptions());
+  const client = connection();
   const { name, dueAt, description, priority, createdBy } = payload;
   const data = {
     id: `"${id}"`,
@@ -102,20 +102,16 @@ export const insertProject = async (id: string, payload: any) => {
 
   const columns = Object.keys(data).join(',');
   const values = Object.values(data).join(',');
+  const statement = `
+  INSERT INTO Project ( ${columns} ) 
+  VALUES ( ${values} )`;
 
   try {
-    const statement = `
-    INSERT INTO Project (
-      ${columns}
-    ) 
-    VALUES (
-      ${values}
-    )`;
-    const results = await connection.promise().query(statement);
-    connection.end();
+    const results = await client.query(statement);
+    client.end();
     return results[0];
   } catch (e) {
     console.log(e);
-    connection.end();
+    client.end();
   }
 };

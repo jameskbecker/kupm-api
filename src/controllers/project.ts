@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
 import { selectInviteByProjectId } from '../db/queries/invite';
 import {
-  deleteProjectById,
   insertProject,
   selectProjectById,
   selectProjectNameById,
@@ -14,23 +13,19 @@ import {
   selectTasksByProjectId,
 } from '../db/queries/task';
 import {
+  deleteUserProjectByProjectId,
   insertUserProject,
   selectUserProjectMembers,
   selectUserProjects,
 } from '../db/queries/userProject';
 
 const defaultBody = { success: false };
-const defaultHeaders = {
-  'Content-Type': 'application/json',
-  // 'Access-Control-Allow-Origin': 'http://localhost:3000',
-};
 
 const getProject = async (req: Request, res: Response) => {
   const { userId } = req.query;
 
   let userProjects;
-  let body: any = defaultBody;
-  res.set(defaultHeaders);
+  let body: any = { ...defaultBody };
   try {
     userProjects = await selectUserProjects(<string>userId);
 
@@ -58,17 +53,28 @@ const getProject = async (req: Request, res: Response) => {
 };
 
 const postProject = async (req: Request, res: Response) => {
-  let body: any = defaultBody;
-  res.set(defaultHeaders);
-
+  let body: any = { ...defaultBody };
+  console.log(req.body);
   try {
     const projectId = uuid();
     await insertProject(projectId, req.body);
     await insertUserProject(projectId, req.body.createdBy);
+    const results = await selectUserProjects(req.body.createdBy, projectId);
 
     res.status(200);
     body.success = true;
-    body.data = {};
+    body.data =
+      results?.map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        isComplete: !!p.is_complete,
+        priority: p.priority,
+        createdAt: p.created_at,
+        completedAt: p.completed_at,
+        dueAt: format(new Date(p.due_at), "yyyy-MM-dd'T'HH:mm"),
+        owner: `${p.owner_last_name.toUpperCase()}, ${p.owner_first_name}`,
+      })) || [];
   } catch (e: any) {
     console.log(e);
     res.status(501);
@@ -80,9 +86,8 @@ const postProject = async (req: Request, res: Response) => {
 
 const getProjectById = async (req: Request, res: Response) => {
   const id = req.params.id;
-  let body: any = defaultBody;
+  let body: any = { ...defaultBody };
 
-  res.set(defaultHeaders);
   try {
     const project = await selectProjectById(id);
     if (!project) {
@@ -103,8 +108,7 @@ const getProjectById = async (req: Request, res: Response) => {
 
 const updateProjectById = async (req: Request, res: Response) => {
   const id = req.params.id;
-  let body: any = defaultBody;
-  res.set(defaultHeaders);
+  let body: any = { ...defaultBody };
 
   try {
     const project = await updateProject(id, req.body);
@@ -126,19 +130,13 @@ const updateProjectById = async (req: Request, res: Response) => {
 
 const deleteProject = async (req: Request, res: Response) => {
   const id = req.params.id;
-  let body: any = defaultBody;
-  res.set(defaultHeaders);
+  let body: any = { ...defaultBody };
 
   try {
     await deleteTaskByProjectId(id);
-    const project = await deleteProjectById(id);
-    if (!project) {
-      res.status(404);
-      body.error = 'Project not Found.';
-    } else {
-      res.status(200);
-      body.data = {};
-    }
+    await deleteUserProjectByProjectId(id);
+    body.success = true;
+    res.status(200);
   } catch (e: any) {
     console.log(e);
     res.status(501);
@@ -150,9 +148,8 @@ const deleteProject = async (req: Request, res: Response) => {
 
 const getProjectTasks = async (req: Request, res: Response) => {
   const id = req.params.id;
-  let body: any = defaultBody;
+  let body: any = { ...defaultBody };
 
-  res.set(defaultHeaders);
   try {
     const { name, description }: any = await selectProjectNameById(id);
 
@@ -190,8 +187,7 @@ const getProjectTasks = async (req: Request, res: Response) => {
 
 const getProjectMembers = async (req: Request, res: Response) => {
   let members;
-  let body: any = defaultBody;
-  res.set(defaultHeaders);
+  let body: any = { ...defaultBody };
   try {
     members = await selectUserProjectMembers(req.params.id);
 
@@ -221,8 +217,7 @@ const getProjectMembers = async (req: Request, res: Response) => {
 
 const getProjectActivity = async (req: Request, res: Response) => {
   let invites;
-  let body: any = defaultBody;
-  res.set(defaultHeaders);
+  let body: any = { ...defaultBody };
   try {
     invites = await selectInviteByProjectId('');
     if (!invites) {

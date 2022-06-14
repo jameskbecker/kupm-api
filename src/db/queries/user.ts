@@ -1,44 +1,94 @@
-import { createConnection, FieldPacket, RowDataPacket } from 'mysql2';
-import connectionOptions from '../connection';
+import { RegisterPayload } from 'controllers/authentication';
+import { FieldPacket, RowDataPacket } from 'mysql2';
+import connection from '../connection';
 
 export const selectUserIdByEmail = async (email: string) => {
-  const connection = createConnection(connectionOptions());
+  const client = connection();
+  const statement = `
+  SELECT User.id
+  FROM User
+  WHERE User.email = "${email}"
+  `;
   try {
-    const statement = `
-      SELECT User.id
-      FROM User
-      WHERE User.email = "${email}"
-    `;
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
-      .promise()
-      .query(statement);
-    connection.end();
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
+      statement
+    );
+    client.end();
     return rows;
   } catch (e) {
     console.error('selectUserIdByEmail', e);
-    connection.end();
+    client.end();
   }
 };
 
 export const selectUserById = async (id: string) => {
-  const connection = createConnection(connectionOptions());
+  const client = connection();
+  const statement = `
+  SELECT 
+    User.id,
+    User.first_name,
+    User.last_name,
+    User.email
+  FROM User
+  WHERE User.id = "${id}"
+  `;
   try {
-    const statement = `
-      SELECT 
-        User.id,
-        User.first_name,
-        User.last_name,
-        User.email
-      FROM User
-      WHERE User.id = "${id}"
-    `;
-    const [rows]: [RowDataPacket[], FieldPacket[]] = await connection
-      .promise()
-      .query(statement);
-    connection.end();
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
+      statement
+    );
+    client.end();
     return rows;
   } catch (e) {
     console.error('selectUserById', e);
-    connection.end();
+    client.end();
+  }
+};
+
+export const insertUser = async (data: RegisterPayload) => {
+  const client = connection();
+  const statement = `
+  INSERT INTO User (
+    id,
+    first_name,
+    last_name,
+    email,
+    password_hash,
+    created_at
+  ) 
+  VALUES (
+    uuid(),
+    "${data.firstName}",
+    "${data.lastName}",
+    "${data.email}",
+    "${data.password}",
+    current_time()
+  )
+  `;
+  try {
+    const result = await client.query(statement);
+    client.end();
+    return result;
+  } catch (e) {
+    client.end();
+    throw e;
+  }
+};
+
+export const selectPasswordByEmail = async (email: string) => {
+  const client = connection();
+  const statement = `
+  SELECT id, password_hash AS password 
+  FROM User
+  WHERE email = "${email}"
+  `;
+  try {
+    const [rows]: [RowDataPacket[], FieldPacket[]] = await client.query(
+      statement
+    );
+    client.end();
+    return rows;
+  } catch (e) {
+    console.error('selectPasswordById', e);
+    client.end();
   }
 };

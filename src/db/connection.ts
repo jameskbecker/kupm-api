@@ -1,18 +1,14 @@
-import mysql from 'mysql2';
+import { ConnectionOptions, createConnection } from 'mysql2';
 
-const connectionOptions = () =>
-  !process.env.PORT
-    ? {
+export const connectionConfig = (): ConnectionOptions =>
+  process.env.DATABASE_URL
+    ? { uri: process.env.DATABASE_URL }
+    : {
         host: 'localhost',
         user: 'root',
         password: 'fyp21-kupm',
         database: 'kupm',
-      }
-    : {
-        host: 'eu-cdbr-west-02.cleardb.net',
-        user: 'bd7692682db0cf',
-        password: '16cd1433',
-        database: 'heroku_e3d8d90d9bda6a1',
       };
 
-export default connectionOptions;
+const connection = () => createConnection(connectionConfig()).promise();
+export default connection;

@@ -8,14 +8,9 @@ import { insertUserProject } from '../db/queries/userProject';
 import { selectUserIdByEmail } from '../db/queries/user';
 
 const defaultBody = { success: false };
-const defaultHeaders = {
-  'Content-Type': 'application/json',
-  // 'Access-Control-Allow-Origin': 'http://localhost:3000',
-};
 
 const postInvite = async (req: Request, res: Response) => {
-  let body: any = defaultBody;
-  res.set(defaultHeaders);
+  let body: any = { ...defaultBody };
 
   try {
     const dataPacket = await selectUserIdByEmail(req.body.email);
@@ -37,8 +32,7 @@ const postInvite = async (req: Request, res: Response) => {
 };
 
 const postInviteJoin = async (req: Request, res: Response) => {
-  let body: any = defaultBody;
-  res.set(defaultHeaders);
+  let body: any = { ...defaultBody };
 
   try {
     const dataPacket = await selectUserIdByEmail('fdk');
