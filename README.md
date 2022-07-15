@@ -116,17 +116,26 @@ Responds with all of a specified user's created projects.<br/>
 |--|--|--|
 | Limit | *number* | Optional parameter for upcoming projects
 
+
 ### Get Single Project
-Responds with detailed data of a specified project.<br/>
+
 **GET** `/api/projects/{{projectId}}`
 
+Responds with detailed data of a specified project.
+
+
 ### Create Project
-Make things easier for your teammates with a complete request description.
+
 **POST** `/api/projects`
 
+Make things easier for your teammates with a complete request description.
+
 ### Update Project
-Updates a project with the provided fields.<br/>
+
 **PUT** `/api/projects/{{projectId}}`
+
+Updates a project with the provided fields.
+
 
 ### Delete Project
 
@@ -134,9 +143,13 @@ Updates a project with the provided fields.<br/>
 
 Deletes the specified project.
 
+
 ### Get Project Tasks
-Responds with a project's top-level tasks.<br/>
+
 **GET** `/api/projects/{{projectId}}/tasks`
+
+Responds with a project's top-level tasks.
+
 
 ### Get Project Activity
 
@@ -152,18 +165,19 @@ Responds with the activity of a specified project.
 Responds with member data of a specified project
 
 ## Task API
-
 ### Get All Tasks
 
 **GET** `/api/tasks`
 
 Responds with all a user's tasks.
 
+
 ### Create Task
 
 **POST** `/api/tasks`
 
 Creates a new tasks using the specified details.
+
 
 ### Update Task
 
@@ -184,6 +198,7 @@ Deletes the specified task.
 **GET** `/api/tasks/{{task_id}}/subtasks`
 
 Responds with a task's subtasks.
+
 
 ### Get Comments
 
