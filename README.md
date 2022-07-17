@@ -61,7 +61,7 @@ Resets the user's forgotten password.<br/>
 ## User API
 ### Delete Notification
 
-**DELETE** `/api/user/{{userId}}/{notificationId}}
+**DELETE** `/api/user/{{userId}}/{notificationId}}`
 
 Deletes a specified notification.
 
