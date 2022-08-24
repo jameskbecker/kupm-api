@@ -71,7 +71,7 @@ Deletes a specified notification.
 | success | boolean |
 
 ### Get All Notifications
-Responds with a user's notifications.<br/>
+Responds with an array of recent or all of a user's notifications.<br/>
 **GET** `/api/users/{{userId}}/notifications?limit=25`
 **Query Parameters**
 | Key | Type |
